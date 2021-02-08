@@ -5,9 +5,8 @@ import path from 'path';
 class Connection {
   public async startConnection (): Promise<any> {
     await createConnection({
-      type: 'postgres',
+      type: 'mysql',
       url: process.env.DATABASE_URL,
-      ssl: true,
       synchronize: true,
       logging: false,
       migrationsRun: true,
