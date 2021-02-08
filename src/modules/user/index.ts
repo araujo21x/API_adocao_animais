@@ -1,10 +1,13 @@
-import { Router, Response, Request } from 'express';
-
+import { Router } from 'express';
+import UserController from './user.controller';
+import auth from '../../middlewares/auth';
 const router = Router();
 
 router.route('/user')
-  .get(async (req: Request, res: Response) => {
-    res.send('ola mundo');
-  });
+  .post(UserController.register)
+  .get(auth, UserController.listUsers);
+
+router.route('/login')
+  .post(UserController.login);
 
 export default router;
