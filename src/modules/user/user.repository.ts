@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { ResponseCode } from '../../helpers/response/responseCode';
 import bcryptjs from 'bcryptjs';
-import Users from '../../database/entity/users.entity';
+import Users from '../../database/entity/User.entity';
 import jwt from 'jsonwebtoken';
 
 class UserRepository {
