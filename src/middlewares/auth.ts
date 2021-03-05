@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 
 interface TokenPayload {
   id: number;
+  type: string;
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -17,8 +18,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const data = jwt.verify(token, process.env.SECRET as string);
-    const { id } = data as TokenPayload;
+    const { id, type } = data as TokenPayload;
     req.userId = id;
+    req.userType = type;
     return next();
   } catch {
     return res.status(401).send({ error: 'token error' });

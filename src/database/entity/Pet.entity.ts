@@ -40,7 +40,7 @@ export default class Pet {
   @Column({ nullable: false })
   species: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false })
   phase: string
 
   @Column({ nullable: false, default: 'Não sei' })
