@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export enum Lang {
-  ptBR = 'pt_BR',
+  ptBR = 'ptBR',
   en = 'en',
   es = 'es',
 }
