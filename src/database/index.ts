@@ -7,7 +7,7 @@ class Connection {
     await createConnection({
       type: 'mysql',
       url: process.env.DATABASE_URL,
-      synchronize: false,
+      synchronize: true,
       logging: false,
       migrationsRun: true,
       entities: [path.join(__dirname, '/entity/*.entity{.ts,.js}')],

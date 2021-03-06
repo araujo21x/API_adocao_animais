@@ -21,18 +21,13 @@ export const ResponseMessages: any = {
     en: '',
     es: ''
   },
-  '001-003': {
-    ptBR: 'Tipo é obrigatório.',
-    en: '',
-    es: ''
-  },
   '001-004': {
     ptBR: 'Email é obrigatório.',
     en: '',
     es: ''
   },
   '001-005': {
-    ptBR: 'Email informado não é valido, EX: exemplo@exemplo.com .',
+    ptBR: 'Email informado não é valido, EX: exemplo@exemplo.com.',
     en: '',
     es: ''
   },
@@ -42,7 +37,7 @@ export const ResponseMessages: any = {
     es: ''
   },
   '001-007': {
-    ptBR: 'Senha precisa ter mais de oitos digitos.',
+    ptBR: 'Senha precisa ter mais de oitos digtos.',
     en: '',
     es: ''
   },
@@ -65,7 +60,7 @@ export const ResponseMessages: any = {
 
   // regiter ONG
   '001-011': {
-    ptBR: 'Foto é obrigatória para usuário ONG.',
+    ptBR: 'Foto é obrigatória.',
     en: '',
     es: ''
   },
@@ -86,89 +81,94 @@ export const ResponseMessages: any = {
     es: ''
   },
   '001-015': {
+    ptBR: 'Rua é obrigatória.',
+    en: '',
+    es: ''
+  },
+  '001-016': {
+    ptBR: 'Bairro é obrigatória.',
+    en: '',
+    es: ''
+  },
+  '001-017': {
     ptBR: 'CEP é obrigatória.',
     en: '',
     es: ''
   },
   // Register Address ONG
-  '001-016': {
-    ptBR: 'latitude é obrigatória.',
-    en: '',
-    es: ''
-  },
-  '001-017': {
-    ptBR: 'latitude informada não é valida.',
-    en: '',
-    es: ''
-  },
   '001-018': {
-    ptBR: 'longitude é obrigatoria.',
+    ptBR: 'Latitude é obrigatória.',
     en: '',
     es: ''
   },
   '001-019': {
-    ptBR: 'longitude informada não é valida.',
+    ptBR: 'Latitude informada não é valida.',
+    en: '',
+    es: ''
+  },
+  '001-020': {
+    ptBR: 'Longitude é obrigatoria.',
+    en: '',
+    es: ''
+  },
+  '001-021': {
+    ptBR: 'Longitude informada não é valida.',
     en: '',
     es: ''
   },
   // register Pet
   '002-001': {
-    ptBR: 'Id do dono obrigatório.',
-    en: '',
-    es: ''
-  },
-  '002-002': {
     ptBR: 'Sexo informada não é valido.',
     en: '',
     es: ''
   },
-  '002-003': {
-    ptBR: 'Status do animal é obrigatória.',
-    en: '',
-    es: ''
-  },
-  '002-004': {
+  '002-002': {
     ptBR: 'Status informado invalido.',
     en: '',
     es: ''
   },
-  '002-005': {
-    ptBR: 'Especie é obrigatória.',
-    en: '',
-    es: ''
-  },
-  '002-006': {
+  '002-003': {
     ptBR: 'Especie informado invalido, EX: gato ou cachorro.',
     en: '',
     es: ''
   },
-  '002-007': {
-    ptBR: 'fase é obrigatória.',
-    en: '',
-    es: ''
-  },
-  '002-008': {
+  '002-004': {
     ptBR: 'fase informada invalida.',
     en: '',
     es: ''
   },
-  '002-009': {
+  '002-005': {
     ptBR: 'Castração informada invalida.',
     en: '',
     es: ''
   },
-  '002-010': {
+  '002-006': {
     ptBR: 'Vacinação informada invalida.',
     en: '',
     es: ''
   },
-  '002-011': {
+  '002-007': {
     ptBR: 'É obrigatório cadastrar pelo menos uma foto do animal.',
     en: '',
     es: ''
   },
-  '002-012': {
+  '002-008': {
     ptBR: 'O limite são 3 fotos por animal.',
+    en: '',
+    es: ''
+  },
+  '002-009': {
+    ptBR: 'Raça é obrigatório.',
+    en: '',
+    es: ''
+  },
+  '003-001': {
+    ptBR: 'E-mail informado não cadastrado.',
+    en: '',
+    es: ''
+  },
+  '003-002': {
+    ptBR: 'Senha informada não pertence a esse usuário.',
     en: '',
     es: ''
   }

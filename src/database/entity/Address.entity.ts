@@ -28,6 +28,12 @@ export default class Address {
   @Column({ nullable: false })
   postalCode: string
 
+  @Column({ nullable: false })
+  street: string
+
+  @Column({ nullable: false })
+  district: string
+
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 8 })
   latitude: number
 

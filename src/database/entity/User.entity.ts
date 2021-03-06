@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import bcrypt from 'bcryptjs';
 
-import Address from './Address .entity';
+import Address from './Address.entity';
 import Pet from './Pet.entity';
 import Favorite from './Favorite.entity';
 
