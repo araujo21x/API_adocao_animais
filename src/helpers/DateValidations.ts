@@ -7,17 +7,17 @@ class DateValidation {
     if (birthday) this.isOldEnough(newDate);
   }
 
-  public ConvertClientToServer (): string {
-    return 'oi';
-  }
-
-  public ConvertServerToClient (dateString: string): string {
+  public ConvertClientToServer (dateString: string): Date {
     const matches = dateString.match(/^(\d{2})[\/|\-](\d{2})[\/|\-](\d{4})$/);
     if (!matches) throw new Error(ResponseCode.E_001_026);
     const year = parseInt(matches[3], 10);
     const month = parseInt(matches[2], 10) - 1;
     const day = parseInt(matches[1], 10);
-    return `${year}-${month}-${day}`;
+    return new Date(year, month, day);
+  }
+
+  public ConvertServerToClient () {
+
   }
 
   private ValidateClientDate (dateString: string): string {
