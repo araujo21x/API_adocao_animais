@@ -37,7 +37,7 @@ export const ResponseMessages: any = {
     es: ''
   },
   '001-007': {
-    ptBR: 'Senha precisa ter mais de oitos digtos.',
+    ptBR: 'Senha precisa ter oito ou mais digtos.',
     en: '',
     es: ''
   },
@@ -113,6 +113,32 @@ export const ResponseMessages: any = {
   },
   '001-021': {
     ptBR: 'Longitude informada não é valida.',
+    en: '',
+    es: ''
+  },
+  // other register user
+  '001-022': {
+    ptBR: 'Email já cadastrado.',
+    en: '',
+    es: ''
+  },
+  '001-023': {
+    ptBR: 'Número de telefone inválido.',
+    en: '',
+    es: ''
+  },
+  '001-024': {
+    ptBR: 'Número de whatsapp inválido.',
+    en: '',
+    es: ''
+  },
+  '001-025': {
+    ptBR: 'CEP inválido.',
+    en: '',
+    es: ''
+  },
+  '001-026': {
+    ptBR: 'Data de aniversario inválido, EX: 21/02/2000.',
     en: '',
     es: ''
   },

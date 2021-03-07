@@ -64,7 +64,7 @@ async function Dump () {
       const userLogin = await transaction.save(userFactory('login', 'test login', '74987456321', '74987456321', 'common', 'login@example.com', 'fasdfasdf', 'fadsdfasd'));
       await transaction.save(addressFactory(userLogin, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
-      const userOngPet = await transaction.save(userFactory('ong', 'register pet', '74987456321', '74987456321', 'ong', emailONG(2), 'fasdfasdf', 'fadsdfasd'));
+      const userOngPet = await transaction.save(userFactory('ong', 'register pet', '74987456321', '74987456321', 'ong', emailONG(1), 'fasdfasdf', 'fadsdfasd'));
       await transaction.save(addressFactory(userOngPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
     });
   } catch (err) {

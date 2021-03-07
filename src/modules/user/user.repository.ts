@@ -1,51 +1,29 @@
 import '../../helpers/env';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { ResponseCode } from '../../helpers/response/responseCode';
-import bcryptjs from 'bcryptjs';
-import Users from '../../database/entity/User.entity';
-import jwt from 'jsonwebtoken';
+
+import userHelper from './user.helper';
+import isUserValid from '../../helpers/isUserValid';
 
 class UserRepository {
   public async register (req: Request, res: Response): Promise<Response> {
-    return res.jsonp(await this.store(req));
+    const { type } = req.body;
+    let answer:any = {};
+    isUserValid(type);
+    if (type === 'ong') answer = await this.storeOng(req.body);
+    if (type === 'common') answer = await this.storeCommon(req.body);
+    return res.jsonp(answer);
   }
 
-  public async listUsers (req: Request, res: Response): Promise<Response> {
-    return res.jsonp(await this.index(req));
+  private async storeOng (body:any):Promise<any> {
+    userHelper.isOngValid(body);
+    await userHelper.existingEmail(body.email);
+    return '0';
   }
 
-  public async login (req: Request, res: Response): Promise<Response> {
-    return res.jsonp(await this.autheticate(req));
-  }
-
-  private async store (req: Request): Promise<Object> {
-    const repository = getRepository(Users);
-    const { email, password } = req.body;
-
-    const user = repository.create({ email, password });
-
-    await repository.save(user);
-    return user;
-  }
-
-  private async index (req: Request): Promise<Object> {
-    const repository = getRepository(Users);
-    return await repository.find();
-  }
-
-  private async autheticate (req: Request): Promise<Object> {
-    const repository = getRepository(Users);
-    const { email, password } = req.body;
-
-    const user = await repository.findOne({ where: { email } });
-
-    if (!user) throw new Error(ResponseCode.E_001_001);
-    const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) throw new Error(ResponseCode.E_001_001);
-
-    const token = jwt.sign({ id: user.id }, `${process.env.SECRET}`, { expiresIn: process.env.EXPIRES_TOKEN });
-    return { user, token };
+  private async storeCommon (body:any):Promise<any> {
+    userHelper.isCommonValid(body);
+    await userHelper.existingEmail(body.email);
+    return '0';
   }
 }
 

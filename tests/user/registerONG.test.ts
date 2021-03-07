@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import app from '../../src/server';
 import { testErrors } from '../helper';
 import startConnection from '../../src/database/index';
-import { emailCommon, password } from '../fields';
+import { emailCommon, emailONG, password } from '../fields';
 
 const endPoint: string = '/v1/user/register';
 const request = supertest(app);
@@ -11,9 +11,9 @@ const request = supertest(app);
 const user = (): any => ({
   name: 'UserOng',
   type: 'ong',
-  whatsApp: '7498765-4321',
-  telephone: '7498765-4321',
-  email: emailCommon(1),
+  whatsApp: '74987654321',
+  telephone: '74987654321',
+  email: emailCommon(2),
   password,
   photoProfile: 'fasdfasdfasdf',
   idPhotoProfile: 'fasdfasdf',
@@ -31,7 +31,7 @@ beforeAll(async () => {
   await startConnection();
 });
 
-describe('Suit de tests register user type common', (): void => {
+describe('Suit de tests register user type common', () => {
   test(`register common user [ success ] [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const { status, body } = await request.post(`${endPoint}`)
@@ -117,21 +117,21 @@ describe('Suit de tests register user type common', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Senha precisa ter mais de oitos digitos.');
+      testErrors(result, 'Senha precisa ter oito ou mais digtos.');
       done();
     });
-  test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
-    async (done: jest.DoneCallback) => {
-      const send: any = user();
-      send.photoProfile = undefined;
+  // test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
+  //   async (done: jest.DoneCallback) => {
+  //     const send: any = user();
+  //     send.photoProfile = undefined;
 
-      const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+  //     const { status, body: { result } } = await request.post(`${endPoint}`)
+  //       .send(send);
 
-      expect(status).toBe(404);
-      testErrors(result, 'Foto é obrigatória para usuário ONG.');
-      done();
-    });
+  //     expect(status).toBe(404);
+  //     testErrors(result, 'Foto é obrigatória para usuário ONG.');
+  //     done();
+  //   });
   test(`[ ERR: 001-012 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
@@ -213,7 +213,7 @@ describe('Suit de tests register user type common', (): void => {
   test(`[ ERR: 001-018 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.postalCode = undefined;
+      send.latitude = undefined;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .send(send);
@@ -226,7 +226,7 @@ describe('Suit de tests register user type common', (): void => {
   test(`[ ERR: 001-019 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.postalCode = '5555';
+      send.latitude = 5555;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .send(send);
@@ -239,7 +239,7 @@ describe('Suit de tests register user type common', (): void => {
   test(`[ ERR: 001-020 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.postalCode = undefined;
+      send.longitude = undefined;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .send(send);
@@ -252,13 +252,63 @@ describe('Suit de tests register user type common', (): void => {
   test(`[ ERR: 001-021 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.postalCode = '5555';
+      send.longitude = 5555;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .send(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Longitude informada não é valida.');
+      done();
+    });
+
+  test(`[ ERR: 001-022 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.email = emailONG(1);
+
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Email já cadastrado.');
+      done();
+    });
+
+  test(`[ ERR: 001-023 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.telephone = '987654321';
+
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Número de telefone inválido.');
+      done();
+    });
+
+  test(`[ ERR: 001-024 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.whatsApp = '987654321';
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Número de whatsapp inválido.');
+      done();
+    });
+
+  test(`[ ERR: 001-025 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.postalCode = '9999';
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'CEP inválido.');
       done();
     });
 });

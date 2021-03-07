@@ -3,16 +3,16 @@ import supertest from 'supertest';
 import app from '../../src/server';
 import { testErrors } from '../helper';
 import startConnection from '../../src/database/index';
-import { emailCommon, password } from '../fields';
+import { emailCommon, emailONG, password } from '../fields';
 
 const endPoint: string = '/v1/user/register';
 const request = supertest(app);
 
-const user = (): any => ({
+const user = () => ({
   name: 'User',
   lastName: 'Common',
-  whatsApp: '7498765-4321',
-  telephone: '7498765-4321',
+  whatsApp: '74987654321',
+  telephone: '74987654321',
   type: 'common',
   birthday: '21/02/1997',
   email: emailCommon(1),
@@ -31,17 +31,15 @@ beforeAll(async () => {
   await startConnection();
 });
 
-describe('Suit de tests register user type common', (): void => {
-  test(`register common user [ success ] [ ${endPoint} ]`,
-    async (done: jest.DoneCallback) => {
-      const { status, body } = await request.post(`${endPoint}`)
-        .send(user());
+describe('Suit de tests register user type common', () => {
+  test(`register common user [ success ] [ ${endPoint} ]`, async done => {
+    const { status, body } = await request.post(endPoint).send(user());
 
-      expect(status).toBe(200);
-      expect(body).toBeTruthy();
+    expect(status).toBe(200);
+    expect(body).toBeTruthy();
 
-      done();
-    });
+    done();
+  });
 
   test(`[ ERR: 001-001 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
@@ -61,7 +59,7 @@ describe('Suit de tests register user type common', (): void => {
       const send: any = user();
       send.type = 'erro';
 
-      const { status, body: { result } } = await request.post(`${endPoint}`)
+      const { status, body: { result } } = await request.post(endPoint)
         .send(send);
 
       expect(status).toBe(404);
@@ -117,7 +115,7 @@ describe('Suit de tests register user type common', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Senha precisa ter mais de oitos digitos.');
+      testErrors(result, 'Senha precisa ter oito ou mais digtos.');
       done();
     });
 
@@ -159,18 +157,18 @@ describe('Suit de tests register user type common', (): void => {
       testErrors(result, 'É obrigatório ter mais de 16 anos.');
       done();
     });
-  test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
-    async (done: jest.DoneCallback) => {
-      const send: any = user();
-      send.photoProfile = undefined;
+  // test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
+  //   async (done: jest.DoneCallback) => {
+  //     const send: any = user();
+  //     send.photoProfile = undefined;
 
-      const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+  //     const { status, body: { result } } = await request.post(`${endPoint}`)
+  //       .send(send);
 
-      expect(status).toBe(404);
-      testErrors(result, 'Foto é obrigatória.');
-      done();
-    });
+  //     expect(status).toBe(404);
+  //     testErrors(result, 'Foto é obrigatória.');
+  //     done();
+  //   });
   test(`[ ERR: 001-012 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
@@ -246,6 +244,68 @@ describe('Suit de tests register user type common', (): void => {
 
       expect(status).toBe(404);
       testErrors(result, 'CEP é obrigatória.');
+      done();
+    });
+
+  test(`[ ERR: 001-022 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.email = emailONG(1);
+
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Email já cadastrado.');
+      done();
+    });
+
+  test(`[ ERR: 001-023 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.telephone = '987654321';
+
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Número de telefone inválido.');
+      done();
+    });
+
+  test(`[ ERR: 001-024 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.whatsApp = '987654321';
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Número de whatsapp inválido.');
+      done();
+    });
+
+  test(`[ ERR: 001-025 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.postalCode = '9999';
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'CEP inválido.');
+      done();
+    });
+
+  test(`[ ERR: 001-026 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
+      send.birthday = '9999.555';
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .send(send);
+
+      expect(status).toBe(404);
+      testErrors(result, 'Data de aniversario inválido, EX: 21/02/2000.');
       done();
     });
 });
