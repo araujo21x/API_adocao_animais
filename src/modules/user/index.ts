@@ -1,13 +1,11 @@
 import { Router } from 'express';
 import UserController from './user.controller';
-import auth from '../../middlewares/auth';
 const router = Router();
 
-router.route('/user')
-  .post(UserController.register)
-  .get(auth, UserController.listUsers);
+router.route('/v1/user/register')
+  .post(UserController.register);
 
-router.route('/login')
+router.route('/v1/login')
   .post(UserController.login);
 
 export default router;

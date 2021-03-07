@@ -31,7 +31,7 @@ export default class Pet {
   @Column({ nullable: true })
   name: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   sex: string
 
   @Column({ nullable: false })
@@ -40,22 +40,22 @@ export default class Pet {
   @Column({ nullable: false })
   species: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false })
   phase: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   castration: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   race: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   vaccination: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   eyeColor: string
 
-  @Column({ nullable: false, default: 'Não sei' })
+  @Column({ nullable: false, default: 'Sem informação' })
   hairColor: string
 
   @Column({ nullable: true })
