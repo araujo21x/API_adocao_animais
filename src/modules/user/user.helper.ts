@@ -72,7 +72,7 @@ class UserHelper {
     const user: User = new User();
     user.name = name;
     user.lastName = lastName;
-    user.birthday = birthday;
+    user.birthday = dateValidation.ConvertClientToServer(birthday);
     user.type = type;
     user.email = email;
     user.password = password;
