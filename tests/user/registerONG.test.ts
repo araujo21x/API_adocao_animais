@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import app from '../../src/server';
 import { testErrors } from '../helper';
 import startConnection from '../../src/database/index';
-import { emailCommon, emailONG, password } from '../fields';
+import { emailONG, password } from '../fields';
 
 const endPoint: string = '/v1/user/register';
 const request = supertest(app);
@@ -13,7 +13,7 @@ const user = (): any => ({
   type: 'ong',
   whatsApp: '74987654321',
   telephone: '74987654321',
-  email: emailCommon(2),
+  email: emailONG(2),
   password,
   photoProfile: 'fasdfasdfasdf',
   idPhotoProfile: 'fasdfasdf',

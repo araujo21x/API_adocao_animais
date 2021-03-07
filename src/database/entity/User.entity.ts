@@ -34,7 +34,7 @@ export default class User {
   @Column({ nullable: true })
   lastName: string
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   whatsApp: string
 
   @Column({ nullable: true })

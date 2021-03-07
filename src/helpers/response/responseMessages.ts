@@ -9,7 +9,11 @@ export const ResponseMessages: any = {
     en: 'Not Found.',
     es: 'No encontrado.'
   },
-
+  '000-001': {
+    ptBR: 'Erro no servidor.',
+    en: '',
+    es: ''
+  },
   // register
   '001-001': {
     ptBR: 'Nome é obrigatório.',
@@ -188,6 +192,7 @@ export const ResponseMessages: any = {
     en: '',
     es: ''
   },
+  // login
   '003-001': {
     ptBR: 'E-mail informado não cadastrado.',
     en: '',

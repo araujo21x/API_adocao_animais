@@ -2,6 +2,7 @@ import { ResponseCode } from '../../helpers/response/responseCode';
 import { getRepository } from 'typeorm';
 
 import User from '../../database/entity/User.entity';
+import Address from '../../database/entity/Address.entity';
 
 import isEmailValid from '../../helpers/isEmailValid';
 import isPasswordValid from '../../helpers/isPasswordValid';
@@ -22,6 +23,84 @@ class UserHelper {
     this.userFieldsIsValid(body);
     this.commonFieldsIsValid(body);
     this.addressFieldsIsValid(body);
+  }
+
+  public isLoginFieldsValid (body: any): void {
+    const { email, password } = body;
+    isEmailValid(email);
+    isPasswordValid(password);
+  }
+
+  public ongFactory (body: any): User {
+    const { name, type, whatsApp, telephone, email, password } = body;
+    const user: User = new User();
+    user.name = name;
+    user.type = type;
+    user.email = email;
+    user.password = password;
+    if (telephone !== undefined) {
+      user.telephone = telephone;
+    }
+    if (whatsApp !== undefined) {
+      user.whatsApp = whatsApp;
+    }
+    return user;
+  }
+
+  public ongAddressFactory (body: any, user: User): Address {
+    const { uf, city, postalCode, addressNumber, street, district, latitude, longitude, complement } = body;
+    const address: Address = new Address();
+    address.user = user;
+    address.uf = uf;
+    address.city = city;
+    address.postalCode = postalCode;
+    address.street = street;
+    address.district = district;
+    address.latitude = latitude;
+    address.longitude = longitude;
+    if (addressNumber !== undefined) {
+      address.addressNumber = addressNumber;
+    }
+    if (complement !== undefined) {
+      address.complement = complement;
+    }
+    return address;
+  }
+
+  public commonFactory (body: any): User {
+    const { name, type, whatsApp, telephone, email, password, lastName, birthday } = body;
+    const user: User = new User();
+    user.name = name;
+    user.lastName = lastName;
+    user.birthday = birthday;
+    user.type = type;
+    user.email = email;
+    user.password = password;
+    if (telephone !== undefined) {
+      user.telephone = telephone;
+    }
+    if (whatsApp !== undefined) {
+      user.whatsApp = whatsApp;
+    }
+    return user;
+  }
+
+  public commonAddressFactory (body: any, user: User): Address {
+    const { uf, city, postalCode, addressNumber, street, district, complement } = body;
+    const address: Address = new Address();
+    address.user = user;
+    address.uf = uf;
+    address.city = city;
+    address.postalCode = postalCode;
+    address.street = street;
+    address.district = district;
+    if (addressNumber !== undefined) {
+      address.addressNumber = addressNumber;
+    }
+    if (complement !== undefined) {
+      address.complement = complement;
+    }
+    return address;
   }
 
   private userFieldsIsValid (userFields: any): void {

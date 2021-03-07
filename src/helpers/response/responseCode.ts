@@ -3,7 +3,7 @@ export enum ResponseCode {
   // Global
   S_000_000 = '000-000',
   E_000_404 = '000-404',
-
+  E_000_001 = '000-001',
   // MENSAGENS [ REGISTRAR ].
   E_001_001 = '001-001',
   E_001_002 = '001-002',
