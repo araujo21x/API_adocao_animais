@@ -15,7 +15,7 @@ export const testErrors = (result: any, msg: string) => {
   });
 };
 
-export const getTokenIdUser = async (username: string) => {
-  const { body: { token, id } } = await request.post('/v1/login').send({ username, password });
-  return { token, id };
+export const getTokenIdUser = async (email: string): Promise<string> => {
+  const { body } = await request.post('/v1/login').send({ email, password });
+  return body;
 };

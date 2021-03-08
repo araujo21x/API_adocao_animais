@@ -148,32 +148,32 @@ export const ResponseMessages: any = {
   },
   // register Pet
   '002-001': {
-    ptBR: 'Sexo informada não é valido.',
+    ptBR: 'Sexo informado não é valido.',
     en: '',
     es: ''
   },
   '002-002': {
-    ptBR: 'Status informado invalido.',
+    ptBR: 'Status informado inválido.',
     en: '',
     es: ''
   },
   '002-003': {
-    ptBR: 'Especie informado invalido, EX: gato ou cachorro.',
+    ptBR: 'Especie informado inválido, EX: gato ou cachorro.',
     en: '',
     es: ''
   },
   '002-004': {
-    ptBR: 'fase informada invalida.',
+    ptBR: 'fase informada inválida.',
     en: '',
     es: ''
   },
   '002-005': {
-    ptBR: 'Castração informada invalida.',
+    ptBR: 'Castração informada inválida.',
     en: '',
     es: ''
   },
   '002-006': {
-    ptBR: 'Vacinação informada invalida.',
+    ptBR: 'Vacinação informada inválida.',
     en: '',
     es: ''
   },
@@ -188,7 +188,7 @@ export const ResponseMessages: any = {
     es: ''
   },
   '002-009': {
-    ptBR: 'Raça é obrigatório.',
+    ptBR: 'Erro ao encontrar usuário logado.',
     en: '',
     es: ''
   },
@@ -200,6 +200,12 @@ export const ResponseMessages: any = {
   },
   '003-002': {
     ptBR: 'Senha informada não pertence a esse usuário.',
+    en: '',
+    es: ''
+  },
+  // upload img
+  '004-001': {
+    ptBR: 'Erro no upload da foto.',
     en: '',
     es: ''
   }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
 import responseError from '../../helpers/response/responseError';
 import repository from './user.repository';
 
@@ -7,6 +8,7 @@ class UserController {
     try {
       return await repository.register(req, res);
     } catch (err) {
+      if (req.file !== undefined) fs.unlinkSync(req.file.path);
       return responseError(res, err.message, 404);
     }
   }

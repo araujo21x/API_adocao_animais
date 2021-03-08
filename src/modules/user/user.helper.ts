@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { ResponseCode } from '../../helpers/response/responseCode';
 import { getRepository } from 'typeorm';
 
@@ -11,18 +12,19 @@ import isPostalCodeValid from '../../helpers/isPostalCodeValid';
 import dateValidation from '../../helpers/DateValidations';
 import isLatitudeValid from '../../helpers/isLatitudeValid';
 import isLongitudeValid from '../../helpers/isLongitudeValid';
+import { uploadCloud } from '../../helpers/cloudinary';
 
 class UserHelper {
-  public isOngValid (body: any): void {
-    this.userFieldsIsValid(body);
-    this.addressFieldsIsValid(body);
-    this.ongAddressIsValid(body);
+  public isOngValid (req: Request): void {
+    this.userFieldsIsValid(req);
+    this.addressFieldsIsValid(req.body);
+    this.ongAddressIsValid(req.body);
   }
 
-  public isCommonValid (body: any): void {
-    this.userFieldsIsValid(body);
-    this.commonFieldsIsValid(body);
-    this.addressFieldsIsValid(body);
+  public isCommonValid (req: Request): void {
+    this.userFieldsIsValid(req);
+    this.commonFieldsIsValid(req.body);
+    this.addressFieldsIsValid(req.body);
   }
 
   public isLoginFieldsValid (body: any): void {
@@ -31,13 +33,16 @@ class UserHelper {
     isPasswordValid(password);
   }
 
-  public ongFactory (body: any): User {
-    const { name, type, whatsApp, telephone, email, password } = body;
+  public async ongFactory (req: Request): Promise<User> {
+    const { name, type, whatsApp, telephone, email, password } = req.body;
+    const photo: any = await uploadCloud(req, 'User');
     const user: User = new User();
     user.name = name;
     user.type = type;
     user.email = email;
     user.password = password;
+    user.photoProfile = photo[0].url;
+    user.idPhotoProfile = photo[0].idPhoto;
     if (telephone !== undefined) {
       user.telephone = telephone;
     }
@@ -47,8 +52,8 @@ class UserHelper {
     return user;
   }
 
-  public ongAddressFactory (body: any, user: User): Address {
-    const { uf, city, postalCode, addressNumber, street, district, latitude, longitude, complement } = body;
+  public ongAddressFactory (req: Request, user: User): Address {
+    const { uf, city, postalCode, addressNumber, street, district, latitude, longitude, complement } = req.body;
     const address: Address = new Address();
     address.user = user;
     address.uf = uf;
@@ -67,9 +72,12 @@ class UserHelper {
     return address;
   }
 
-  public commonFactory (body: any): User {
-    const { name, type, whatsApp, telephone, email, password, lastName, birthday } = body;
+  public async commonFactory (req: Request): Promise<User> {
+    const { name, type, whatsApp, telephone, email, password, lastName, birthday } = req.body;
+    const photo: any = await uploadCloud(req, 'User');
     const user: User = new User();
+    user.photoProfile = photo[0].url;
+    user.idPhotoProfile = photo[0].idPhoto;
     user.name = name;
     user.lastName = lastName;
     user.birthday = dateValidation.ConvertClientToServer(birthday);
@@ -85,8 +93,8 @@ class UserHelper {
     return user;
   }
 
-  public commonAddressFactory (body: any, user: User): Address {
-    const { uf, city, postalCode, addressNumber, street, district, complement } = body;
+  public commonAddressFactory (req: Request, user: User): Address {
+    const { uf, city, postalCode, addressNumber, street, district, complement } = req.body;
     const address: Address = new Address();
     address.user = user;
     address.uf = uf;
@@ -103,8 +111,8 @@ class UserHelper {
     return address;
   }
 
-  private userFieldsIsValid (userFields: any): void {
-    const { name, whatsApp, telephone, email, password } = userFields;
+  private userFieldsIsValid (req: Request): void {
+    const { name, whatsApp, telephone, email, password } = req.body;
     if (!name) throw new Error(ResponseCode.E_001_001);
     if (telephone !== undefined) {
       if (telephone.length !== 11) throw new Error(ResponseCode.E_001_023);
@@ -112,6 +120,7 @@ class UserHelper {
     if (whatsApp !== undefined) {
       if (whatsApp.length !== 11) throw new Error(ResponseCode.E_001_024);
     }
+    if (req.file === undefined) throw new Error(ResponseCode.E_001_011);
     isEmailValid(email);
     isPasswordValid(password);
   }

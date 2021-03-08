@@ -28,7 +28,7 @@ export default class Pet {
   @OneToMany(() => Favorite, favorite => favorite.pet)
   favorite: Favorite[]
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 'Sem informação' })
   name: string
 
   @Column({ nullable: false, default: 'Sem informação' })

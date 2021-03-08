@@ -2,8 +2,11 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import userRouter from './modules/user/index';
 import compression from 'compression';
+
+import userRouter from './modules/user/index';
+import petRouter from './modules/pet';
+
 class App {
   public app: express.Application;
 
@@ -22,6 +25,7 @@ class App {
 
   private routes (): void {
     this.app.use(userRouter);
+    this.app.use(petRouter);
   }
 }
 

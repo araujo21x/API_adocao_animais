@@ -51,4 +51,6 @@ export enum ResponseCode {
   // MENSAGENS [ login ].
   E_003_001 = '003-001',
   E_003_002 = '003-002',
+  // Mensagens [upload].
+  E_004_001 = '004-001',
 }

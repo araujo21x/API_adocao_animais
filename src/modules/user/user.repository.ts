@@ -13,8 +13,8 @@ class UserRepository {
     const { type } = req.body;
     let answer: any = {};
     isUserValid(type);
-    if (type === 'ong') answer = await this.storeOng(req.body);
-    if (type === 'common') answer = await this.storeCommon(req.body);
+    if (type === 'ong') answer = await this.storeOng(req);
+    if (type === 'common') answer = await this.storeCommon(req);
     return res.jsonp(answer);
   }
 
@@ -22,15 +22,15 @@ class UserRepository {
     return res.jsonp(await this.autheticate(req.body));
   }
 
-  private async storeOng (body: any): Promise<string> {
-    userHelper.isOngValid(body);
-    await userHelper.existingEmail(body.email);
+  private async storeOng (req: Request): Promise<string> {
+    userHelper.isOngValid(req);
+    await userHelper.existingEmail(req.body.email);
     let user: any = {};
 
     try {
       await getConnection().transaction(async transaction => {
-        user = await transaction.save(userHelper.ongFactory(body));
-        await transaction.save(userHelper.ongAddressFactory(body, user));
+        user = await transaction.save(await userHelper.ongFactory(req));
+        await transaction.save(userHelper.ongAddressFactory(req, user));
       });
     } catch (err) {
       throw new Error(ResponseCode.E_000_001);
@@ -39,15 +39,15 @@ class UserRepository {
     return token(user.id, user.type);
   }
 
-  private async storeCommon (body: any): Promise<string> {
-    userHelper.isCommonValid(body);
-    await userHelper.existingEmail(body.email);
+  private async storeCommon (req: Request): Promise<string> {
+    userHelper.isCommonValid(req);
+    await userHelper.existingEmail(req.body.email);
     let user: any = {};
 
     try {
       await getConnection().transaction(async transaction => {
-        user = await transaction.save(userHelper.commonFactory(body));
-        await transaction.save(userHelper.commonAddressFactory(body, user));
+        user = await transaction.save(await userHelper.commonFactory(req));
+        await transaction.save(userHelper.commonAddressFactory(req, user));
       });
     } catch (err) {
       throw new Error(ResponseCode.E_000_001);
