@@ -1,4 +1,5 @@
 import supertest from 'supertest';
+import path from 'path';
 
 import app from '../../src/server';
 import { testErrors } from '../helper';
@@ -7,10 +8,11 @@ import { emailCommon, emailONG, password } from '../fields';
 
 const endPoint: string = '/v1/user/register';
 const request = supertest(app);
+const filePath = path.resolve(__dirname, '..', 'files', 'imgProfile1.png');
 
 const user = () => ({
   name: 'User',
-  lastName: 'Common',
+  lastName: 'common',
   whatsApp: '74987654321',
   telephone: '74987654321',
   type: 'common',
@@ -33,7 +35,9 @@ beforeAll(async () => {
 
 describe('Suit de tests register user type common', () => {
   test(`register common user [ success ] [ ${endPoint} ]`, async done => {
-    const { status, body } = await request.post(endPoint).send(user());
+    const { status, body } = await request.post(endPoint)
+      .attach('photoProfile', filePath)
+      .field(user());
 
     expect(status).toBe(200);
     expect(body).toBeTruthy();
@@ -44,10 +48,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-001 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.name = undefined;
+      delete send.name;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Nome é obrigatório.');
@@ -60,7 +65,8 @@ describe('Suit de tests register user type common', () => {
       send.type = 'erro';
 
       const { status, body: { result } } = await request.post(endPoint)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Tipo informado não cadastrado.');
@@ -70,10 +76,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-004 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.email = undefined;
+      delete send.email;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Email é obrigatório.');
@@ -86,7 +93,8 @@ describe('Suit de tests register user type common', () => {
       send.email = 'erro.com.br';
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Email informado não é valido, EX: exemplo@exemplo.com.');
@@ -96,10 +104,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-006 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.password = undefined;
+      delete send.password;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Senha é Obrigatória.');
@@ -112,7 +121,8 @@ describe('Suit de tests register user type common', () => {
       send.password = '1526';
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Senha precisa ter oito ou mais digtos.');
@@ -122,10 +132,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-008 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.lastName = undefined;
+      delete send.lastName;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Sobrenome é obrigatório para usuário comum.');
@@ -135,10 +146,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-009 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.birthday = undefined;
+      delete send.birthday;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Aniversário é obrigatório.');
@@ -151,31 +163,32 @@ describe('Suit de tests register user type common', () => {
       send.birthday = '21/02/2010';
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'É obrigatório ter mais de 16 anos.');
       done();
     });
-  // test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
-  //   async (done: jest.DoneCallback) => {
-  //     const send: any = user();
-  //     send.photoProfile = undefined;
+  test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const send: any = user();
 
-  //     const { status, body: { result } } = await request.post(`${endPoint}`)
-  //       .send(send);
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .field(send);
 
-  //     expect(status).toBe(404);
-  //     testErrors(result, 'Foto é obrigatória.');
-  //     done();
-  //   });
+      expect(status).toBe(404);
+      testErrors(result, 'Foto é obrigatória.');
+      done();
+    });
   test(`[ ERR: 001-012 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.uf = undefined;
+      delete send.uf;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'UF é obrigatória.');
@@ -188,7 +201,8 @@ describe('Suit de tests register user type common', () => {
       send.uf = 'Bahia';
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'UF informado não é valida, EX: BA.');
@@ -198,10 +212,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-014 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.city = undefined;
+      delete send.city;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Cidade é obrigatória.');
@@ -211,10 +226,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-015 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.street = undefined;
+      delete send.street;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Rua é obrigatória.');
@@ -224,10 +240,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-016 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.district = undefined;
+      delete send.district;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Bairro é obrigatória.');
@@ -237,10 +254,11 @@ describe('Suit de tests register user type common', () => {
   test(`[ ERR: 001-017 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();
-      send.postalCode = undefined;
+      delete send.postalCode;
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'CEP é obrigatória.');
@@ -253,7 +271,8 @@ describe('Suit de tests register user type common', () => {
       send.email = emailONG(1);
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Email já cadastrado.');
@@ -266,7 +285,8 @@ describe('Suit de tests register user type common', () => {
       send.telephone = '987654321';
 
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Número de telefone inválido.');
@@ -278,7 +298,8 @@ describe('Suit de tests register user type common', () => {
       const send: any = user();
       send.whatsApp = '987654321';
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Número de whatsapp inválido.');
@@ -290,7 +311,8 @@ describe('Suit de tests register user type common', () => {
       const send: any = user();
       send.postalCode = '9999';
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'CEP inválido.');
@@ -302,7 +324,8 @@ describe('Suit de tests register user type common', () => {
       const send: any = user();
       send.birthday = '9999.555';
       const { status, body: { result } } = await request.post(`${endPoint}`)
-        .send(send);
+        .attach('photoProfile', filePath)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Data de aniversario inválido, EX: 21/02/2000.');

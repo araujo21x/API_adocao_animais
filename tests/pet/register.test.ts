@@ -16,7 +16,7 @@ const pet = (): any => ({
   phase: 'puppy',
   castration: 'Castrado',
   race: 'Vira-lata',
-  vaccination: 'Em dia',
+  vaccination: 'Vacinado',
   eyeColor: 'Azul',
   hairColor: 'Branco com marrom',
   feature: 'Só tem dois dedos nas patas de tras e todas as unhas são tortas'
@@ -26,7 +26,7 @@ let token: string;
 
 beforeAll(async () => {
   await startConnection();
-  token = (await getTokenIdUser(emailONG(1))).token;
+  token = await getTokenIdUser(emailONG(1));
 });
 
 describe('Suit de tests register pet', (): void => {
@@ -37,7 +37,7 @@ describe('Suit de tests register pet', (): void => {
         .send(pet());
 
       expect(status).toBe(200);
-      expect(body).toBeTruthy();
+      expect(body).toBeFalsy();
 
       done();
     });
@@ -51,7 +51,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Sexo informada não é valido.');
+      testErrors(result, 'Sexo informado não é valido.');
       done();
     });
 
@@ -64,7 +64,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Sexo informada não é valido.');
+      testErrors(result, 'Sexo informado não é valido.');
       done();
     });
 
@@ -77,7 +77,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Status informado invalido.');
+      testErrors(result, 'Status informado inválido.');
       done();
     });
 
@@ -90,7 +90,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Status informado invalido.');
+      testErrors(result, 'Status informado inválido.');
       done();
     });
 
@@ -103,7 +103,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Especie informado invalido, EX: gato ou cachorro.');
+      testErrors(result, 'Especie informado inválido, EX: gato ou cachorro.');
       done();
     });
 
@@ -116,7 +116,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Especie informado invalido, EX: gato ou cachorro.');
+      testErrors(result, 'Especie informado inválido, EX: gato ou cachorro.');
       done();
     });
 
@@ -129,7 +129,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'fase informada invalida.');
+      testErrors(result, 'fase informada inválida.');
       done();
     });
 
@@ -142,7 +142,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'fase informada invalida.');
+      testErrors(result, 'fase informada inválida.');
       done();
     });
 
@@ -155,7 +155,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Castração informada invalida.');
+      testErrors(result, 'Castração informada inválida.');
       done();
     });
 
@@ -168,7 +168,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Castração informada invalida.');
+      testErrors(result, 'Castração informada inválida.');
       done();
     });
 
@@ -181,7 +181,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Vacinação informada invalida.');
+      testErrors(result, 'Vacinação informada inválida.');
       done();
     });
 
@@ -194,7 +194,7 @@ describe('Suit de tests register pet', (): void => {
         .send(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Vacinação informada invalida.');
+      testErrors(result, 'Vacinação informada inválida.');
       done();
     });
 
@@ -219,17 +219,4 @@ describe('Suit de tests register pet', (): void => {
   //     testErrors(result, 'O limite são 3 fotos por animal.');
   //     done();
   //   });
-
-  test(`[ ERR: 002-009 ] - [ ${endPoint} ]`,
-    async (done: jest.DoneCallback) => {
-      const send: any = pet();
-      send.race = 'adolescente';
-      const { status, body: { result } } = await request.post(`${endPoint}`)
-        .set('authorization', `Bearer ${token}`)
-        .send(pet());
-
-      expect(status).toBe(404);
-      testErrors(result, 'Raça é obrigatório.');
-      done();
-    });
 });
