@@ -4,7 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
   JoinColumn
 } from 'typeorm';
 
@@ -15,7 +15,7 @@ export default class PetPhoto {
   @PrimaryGeneratedColumn()
   id:number
 
-  @OneToMany(() => Pet, pet => pet.id)
+  @ManyToOne(() => Pet, pet => pet.id)
   @JoinColumn()
   pet: Pet
 
