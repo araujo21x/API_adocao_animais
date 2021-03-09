@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
+
 import { ResponseCode } from '../../helpers/response/responseCode';
 import petHelper from './pet.helper';
+import PetPhoto from '../../database/entity/PetPhoto.entity';
 
 class PetRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -10,12 +12,14 @@ class PetRepository {
   }
 
   private async storePet (req: Request): Promise<void> {
-    petHelper.isPetFieldsValid(req.body);
+    petHelper.isPetFieldsValid(req);
     const user = await petHelper.userIsValid(req.userId);
 
     try {
       await getConnection().transaction(async transaction => {
-        await transaction.save(petHelper.petFactory(req.body, user));
+        const pet = await transaction.save(petHelper.petFactory(req.body, user));
+        await transaction.getRepository(PetPhoto)
+          .save(await petHelper.petPhotosFactory(req, pet));
       });
     } catch (err) {
       throw new Error(ResponseCode.E_000_001);

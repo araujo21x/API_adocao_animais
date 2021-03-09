@@ -18,14 +18,14 @@ export default class Pet {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User
 
-  @OneToMany(() => PetPhotos, petPhotos => petPhotos.pet)
+  @OneToMany(() => PetPhotos, petPhotos => petPhotos.pet, { cascade: true })
   petPhotos: PetPhotos[]
 
-  @OneToMany(() => Favorite, favorite => favorite.pet)
+  @OneToMany(() => Favorite, favorite => favorite.pet, { cascade: true })
   favorite: Favorite[]
 
   @Column({ nullable: true, default: 'Sem informação' })

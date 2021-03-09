@@ -15,7 +15,7 @@ export default class Address {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User
 

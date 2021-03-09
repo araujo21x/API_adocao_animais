@@ -1,4 +1,5 @@
 import supertest from 'supertest';
+import path from 'path';
 
 import app from '../../src/server';
 import { testErrors, getTokenIdUser } from '../helper';
@@ -7,6 +8,8 @@ import startConnection from '../../src/database/index';
 
 const endPoint: string = '/v1/pets/register';
 const request = supertest(app);
+const filePath = path.resolve(__dirname, '..', 'files', 'imgPet1.jpg');
+const filePath2 = path.resolve(__dirname, '..', 'files', 'imgPet2.jpg');
 
 const pet = (): any => ({
   name: 'Logan',
@@ -34,7 +37,9 @@ describe('Suit de tests register pet', (): void => {
     async (done: jest.DoneCallback) => {
       const { status, body } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(pet());
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(pet());
 
       expect(status).toBe(200);
       expect(body).toBeFalsy();
@@ -45,10 +50,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-001 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.sex = undefined;
+      delete send.sex;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Sexo informado não é valido.');
@@ -58,10 +65,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-001 ] string - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.sex = undefined;
+      delete send.sex;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Sexo informado não é valido.');
@@ -71,10 +80,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-002 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.status = undefined;
+      delete send.status;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Status informado inválido.');
@@ -87,7 +98,9 @@ describe('Suit de tests register pet', (): void => {
       send.status = 'error';
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Status informado inválido.');
@@ -97,10 +110,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-003 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.species = undefined;
+      delete send.species;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Especie informado inválido, EX: gato ou cachorro.');
@@ -113,7 +128,9 @@ describe('Suit de tests register pet', (): void => {
       send.species = 'papagaio';
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Especie informado inválido, EX: gato ou cachorro.');
@@ -123,10 +140,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-004 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.phase = undefined;
+      delete send.phase;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'fase informada inválida.');
@@ -139,7 +158,9 @@ describe('Suit de tests register pet', (): void => {
       send.phase = 'adolescente';
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'fase informada inválida.');
@@ -149,10 +170,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-005 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.castration = undefined;
+      delete send.castration;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Castração informada inválida.');
@@ -165,7 +188,9 @@ describe('Suit de tests register pet', (): void => {
       send.castration = 'adolescente';
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Castração informada inválida.');
@@ -175,10 +200,12 @@ describe('Suit de tests register pet', (): void => {
   test(`[ ERR: 002-006 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();
-      send.vaccination = undefined;
+      delete send.vaccination;
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Vacinação informada inválida.');
@@ -191,32 +218,39 @@ describe('Suit de tests register pet', (): void => {
       send.vaccination = 'adolescente';
       const { status, body: { result } } = await request.post(`${endPoint}`)
         .set('authorization', `Bearer ${token}`)
-        .send(send);
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(send);
 
       expect(status).toBe(404);
       testErrors(result, 'Vacinação informada inválida.');
       done();
     });
 
-  // test(`[ ERR: 002-007 ] - [ ${endPoint} ]`,
-  //   async (done: jest.DoneCallback) => {
-  //     const { status, body: { result } } = await request.post(`${endPoint}`)
-  //       .set('authorization', `Bearer ${token}`)
-  //       .send(pet());
+  test(`[ ERR: 002-007 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .set('authorization', `Bearer ${token}`)
+        .field(pet());
 
-  //     expect(status).toBe(404);
-  //     testErrors(result, 'É obrigatório cadastrar pelo menos uma foto do animal.');
-  //     done();
-  //   });
+      expect(status).toBe(404);
+      testErrors(result, 'É obrigatório cadastrar pelo menos uma foto do animal.');
+      done();
+    });
 
-  // test(`[ ERR: 002-008 ] - [ ${endPoint} ]`,
-  //   async (done: jest.DoneCallback) => {
-  //     const { status, body: { result } } = await request.post(`${endPoint}`)
-  //       .set('authorization', `Bearer ${token}`)
-  //       .send(pet());
+  test(`[ ERR: 002-008 ] - [ ${endPoint} ]`,
+    async (done: jest.DoneCallback) => {
+      const { status, body: { result } } = await request.post(`${endPoint}`)
+        .set('authorization', `Bearer ${token}`)
+        .attach('photos', filePath)
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .attach('photos', filePath)
+        .attach('photos', filePath2)
+        .field(pet());
 
-  //     expect(status).toBe(404);
-  //     testErrors(result, 'O limite são 3 fotos por animal.');
-  //     done();
-  //   });
+      expect(status).toBe(404);
+      testErrors(result, 'O limite são 3 fotos por animal.');
+      done();
+    });
 });
