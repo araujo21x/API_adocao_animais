@@ -15,7 +15,7 @@ export default class PetPhoto {
   @PrimaryGeneratedColumn()
   id:number
 
-  @ManyToOne(() => Pet, pet => pet.id)
+  @ManyToOne(() => Pet, pet => pet.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   pet: Pet
 

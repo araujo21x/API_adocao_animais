@@ -19,13 +19,13 @@ export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Address, address => address.user)
+  @OneToMany(() => Address, address => address.user, { cascade: true })
   address: Address[]
 
-  @OneToMany(() => Pet, pet => pet.user)
+  @OneToMany(() => Pet, pet => pet.user, { cascade: true })
   pet: Pet[]
 
-  @OneToMany(() => Favorite, favorite => favorite.user)
+  @OneToMany(() => Favorite, favorite => favorite.user, { cascade: true })
   favorite: Favorite[]
 
   @Column({ nullable: false })

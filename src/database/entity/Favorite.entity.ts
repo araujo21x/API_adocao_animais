@@ -15,11 +15,11 @@ export default class Favorite {
   @PrimaryGeneratedColumn()
   id:number
 
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User
 
-  @ManyToOne(() => Pet, pet => pet.id)
+  @ManyToOne(() => Pet, pet => pet.id, { onDelete: 'CASCADE' })
   @JoinColumn()
   pet: Pet
 
