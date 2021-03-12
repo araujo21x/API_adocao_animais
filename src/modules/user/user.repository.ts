@@ -22,6 +22,14 @@ class UserRepository {
     return res.jsonp(await this.autheticate(req.body));
   }
 
+  public async edit (req: Request, res: Response): Promise<Response> {
+    const { userType } = req;
+    let answer:any = {};
+    if (userType === 'ong') answer = await this.editOng(req);
+    if (userType === 'common') answer = await this.editCommon(req);
+    return res.jsonp(answer);
+  }
+
   private async storeOng (req: Request): Promise<string> {
     userHelper.isOngValid(req);
     await userHelper.existingEmail(req.body.email);
@@ -68,6 +76,9 @@ class UserRepository {
 
     return token(user.id, user.type);
   }
+
+  private async editOng (req:Request):Promise<void> {}
+  private async editCommon (req:Request):Promise<void> {}
 }
 
 export default new UserRepository();

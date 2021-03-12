@@ -20,6 +20,14 @@ class UserController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async edit (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.edit(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new UserController();

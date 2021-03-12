@@ -12,7 +12,7 @@ cloudinary.v2.config({
   api_secret: process.env.API_SECRET
 });
 
-const upload = async (file: string, folder: string, fileName: string): Promise<any> => {
+export const upload = async (file: string, folder: string, fileName: string): Promise<any> => {
   try {
     const value = await cloudinary.v2.uploader.upload(file
       , { public_id: `Adoption/${folder}/${fileName}` });

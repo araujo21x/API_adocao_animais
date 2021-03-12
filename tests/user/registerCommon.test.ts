@@ -18,8 +18,6 @@ const user = () => ({
   type: 'common',
   birthday: '21/02/1997',
   email: emailCommon(1),
-  photoProfile: 'fasdfasdfasdf',
-  idPhotoProfile: 'fasdfasdf',
   password,
   uf: 'BA',
   city: 'city test',
@@ -125,7 +123,7 @@ describe('Suit de tests register user type common', () => {
         .field(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Senha precisa ter oito ou mais digtos.');
+      testErrors(result, 'Senha precisa ter oito ou mais dígitos.');
       done();
     });
 

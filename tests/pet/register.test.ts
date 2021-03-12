@@ -46,7 +46,24 @@ describe('Suit de tests register pet', (): void => {
 
       done();
     });
+  test(`[ No token provided ] - [ ${endPoint} ]`, async done => {
+    const { status, body: { error } } = await request.post(endPoint)
+      .field(pet());
 
+    expect(status).toBe(401);
+    testErrors(error, 'No token provided');
+    done();
+  });
+
+  test(`[ token error ] - [ ${endPoint} ]`, async done => {
+    const { status, body: { error } } = await request.post(endPoint)
+      .set('authorization', 'Bearer djfaklsdjflajsldjfljkas')
+      .field(pet());
+
+    expect(status).toBe(401);
+    testErrors(error, 'No token provided');
+    done();
+  });
   test(`[ ERR: 002-001 ] undefined - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = pet();

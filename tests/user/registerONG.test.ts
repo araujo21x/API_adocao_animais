@@ -17,8 +17,6 @@ const user = (): any => ({
   telephone: '74987654321',
   email: emailONG(2),
   password,
-  photoProfile: 'fasdfasdfasdf',
-  idPhotoProfile: 'fasdfasdf',
   uf: 'BA',
   city: 'city test',
   postalCode: '48970-000',
@@ -126,7 +124,7 @@ describe('Suit de tests register user type common', () => {
         .field(send);
 
       expect(status).toBe(404);
-      testErrors(result, 'Senha precisa ter oito ou mais digtos.');
+      testErrors(result, 'Senha precisa ter oito ou mais dígitos.');
       done();
     });
   test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
