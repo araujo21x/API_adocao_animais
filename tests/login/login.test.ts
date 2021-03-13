@@ -73,7 +73,7 @@ describe('Suit de tests for login', (): void => {
         .send(value);
 
       expect(status).toBe(404);
-      testErrors(result, 'Senha precisa ter oito ou mais digtos.');
+      testErrors(result, 'Senha precisa ter oito ou mais dígitos.');
       done();
     });
 

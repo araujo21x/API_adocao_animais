@@ -203,9 +203,14 @@ export const ResponseMessages: any = {
     en: '',
     es: ''
   },
-  // upload img
+  // cloudinary img
   '004-001': {
     ptBR: 'Erro no upload da foto.',
+    en: '',
+    es: ''
+  },
+  '004-002': {
+    ptBR: 'Erro ao deletar foto.',
     en: '',
     es: ''
   },

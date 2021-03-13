@@ -8,7 +8,7 @@ class UserController {
     try {
       return await repository.register(req, res);
     } catch (err) {
-      if (req.file !== undefined) fs.unlinkSync(req.file.path);
+      if (req.file) fs.unlinkSync(req.file.path);
       return responseError(res, err.message, 404);
     }
   }
@@ -25,6 +25,7 @@ class UserController {
     try {
       return await repository.edit(req, res);
     } catch (err) {
+      if (req.file) fs.unlinkSync(req.file.path);
       return responseError(res, err.message, 404);
     }
   }

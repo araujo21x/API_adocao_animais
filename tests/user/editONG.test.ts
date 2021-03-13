@@ -14,7 +14,7 @@ const editUser = () => ({
   name: 'successfullyEditOng',
   whatsApp: '31912345678',
   telephone: '31912345678',
-  email: 'commonEditUser@example.com',
+  email: 'OngEditUser@example.com',
   password: '40302010',
   uf: 'MG',
   city: 'city editsuccessfully',
