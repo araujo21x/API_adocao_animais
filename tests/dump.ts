@@ -1,29 +1,32 @@
 import { config } from 'dotenv';
 import { getConnection } from 'typeorm';
+import path from 'path';
 
 import startConnection from '../src/database/index';
-import { password, emailONG } from './fields';
+import { upload } from '../src/helpers/cloudinary';
+import { password, emailONG, emailCommon } from './fields';
+
 import User from '../src/database/entity/User.entity';
 import Address from '../src/database/entity/Address.entity';
 
 config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 const userFactory = (
   name: string,
-  lastName: string,
   whatsApp: string,
   telephone: string,
   type: string,
   email: string,
   photoProfile: string,
-  idPhotoProfile: string
+  idPhotoProfile: string,
+  lastName?: string
 ) => {
   const newUser = new User();
   newUser.name = name;
-  newUser.lastName = lastName;
+  newUser.lastName = lastName!;
   newUser.whatsApp = whatsApp;
   newUser.telephone = telephone;
   newUser.type = type;
-  newUser.birthday = new Date('1997-02-21');
+  if (type === 'common') newUser.birthday = new Date('1997-02-21');
   newUser.email = email;
   newUser.password = password;
   newUser.photoProfile = photoProfile;
@@ -61,11 +64,19 @@ async function Dump () {
   try {
     await startConnection();
     await getConnection().transaction(async transaction => {
-      const userLogin = await transaction.save(userFactory('login', 'test login', '74987456321', '74987456321', 'common', 'login@example.com', 'fasdfasdf', 'fadsdfasd'));
+      const userLogin = await transaction.save(userFactory('loginRegister', '74987456321', '74987456321', 'common', 'login@example.com', 'fasdfasdf', 'fadsdfasd', 'test login'));
       await transaction.save(addressFactory(userLogin, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
-      const userOngPet = await transaction.save(userFactory('ong', 'register pet', '74987456321', '74987456321', 'ong', emailONG(1), 'fasdfasdf', 'fadsdfasd'));
+      const userOngPet = await transaction.save(userFactory('ongRegister', '74987456321', '74987456321', 'ong', emailONG(1), 'fasdfasdf', 'fadsdfasd'));
       await transaction.save(addressFactory(userOngPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
+
+      const photoUserCommon = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite User Common 1');
+      const userEditCommon = await transaction.save(userFactory('editCommon', '74987456321', '74987456321', 'common', emailCommon(2), photoUserCommon.url, photoUserCommon.idPhoto, 'test edit common'));
+      await transaction.save(addressFactory(userEditCommon, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
+
+      const photoUserONG = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite User ONG 1');
+      const userEditONG = await transaction.save(userFactory('editONG', '74987456321', '74987456321', 'ong', emailONG(3), photoUserONG.url, photoUserONG.idPhoto));
+      await transaction.save(addressFactory(userEditONG, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
     });
   } catch (err) {
     console.log(err);

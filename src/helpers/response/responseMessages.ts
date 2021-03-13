@@ -41,7 +41,7 @@ export const ResponseMessages: any = {
     es: ''
   },
   '001-007': {
-    ptBR: 'Senha precisa ter oito ou mais digtos.',
+    ptBR: 'Senha precisa ter oito ou mais dígitos.',
     en: '',
     es: ''
   },
@@ -203,9 +203,20 @@ export const ResponseMessages: any = {
     en: '',
     es: ''
   },
-  // upload img
+  // cloudinary img
   '004-001': {
     ptBR: 'Erro no upload da foto.',
+    en: '',
+    es: ''
+  },
+  '004-002': {
+    ptBR: 'Erro ao deletar foto.',
+    en: '',
+    es: ''
+  },
+  // edit user
+  '005-001': {
+    ptBR: 'Não é possível modificar tipo de usuário.',
     en: '',
     es: ''
   }

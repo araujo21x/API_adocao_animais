@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
-  BeforeUpdate,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany
@@ -71,8 +70,7 @@ export default class User {
   updatedAt: Date;
 
   @BeforeInsert()
-  @BeforeUpdate()
-  hashPassword () {
+  hashPasswordInsert () {
     this.password = bcrypt.hashSync(this.password, 10);
   }
 }

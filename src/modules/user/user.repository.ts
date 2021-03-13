@@ -3,10 +3,12 @@ import { getRepository, getConnection } from 'typeorm';
 import bcryptjs from 'bcryptjs';
 
 import { ResponseCode } from '../../helpers/response/responseCode';
+import { deleteCloudinary } from '../../helpers/cloudinary';
 import userHelper from './user.helper';
 import isUserValid from '../../helpers/isUserValid';
 import token from '../../helpers/generateJWT';
 import User from '../../database/entity/User.entity';
+import Address from '../../database/entity/Address.entity';
 
 class UserRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -20,6 +22,14 @@ class UserRepository {
 
   public async login (req: Request, res: Response): Promise<Response> {
     return res.jsonp(await this.autheticate(req.body));
+  }
+
+  public async edit (req: Request, res: Response): Promise<Response> {
+    const { userType } = req;
+    if (req.body.type) throw new Error(ResponseCode.E_005_001);
+    if (userType === 'ong') await this.editOng(req);
+    if (userType === 'common') await this.editCommon(req);
+    return res.jsonp({});
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -67,6 +77,54 @@ class UserRepository {
     if (!validPassword) throw new Error(ResponseCode.E_003_002);
 
     return token(user.id, user.type);
+  }
+
+  private async editOng (req:Request):Promise<void> {
+    userHelper.isOngValidEdit(req);
+    if (req.body.email) await userHelper.existingEmail(req.body.email);
+    const user:any = await getRepository(User).findOne({ id: req.userId });
+
+    try {
+      await getConnection().transaction(async transaction => {
+        if (userHelper.isNeedUserOng(req.body)) {
+          await transaction.getRepository(User)
+            .update(req.userId, await userHelper.ongFactoryEdit(req));
+        }
+
+        if (userHelper.isNeedAddressOng(req.body)) {
+          await transaction.getRepository(Address)
+            .update(req.userId, userHelper.ongAddressFactoryEdit(req));
+        }
+
+        if (req.file) await deleteCloudinary(user.idPhotoProfile);
+      });
+    } catch (err) {
+      throw new Error(ResponseCode.E_000_001);
+    }
+  }
+
+  private async editCommon (req:Request):Promise<void> {
+    userHelper.isCommonValidEdit(req);
+    if (req.body.email) await userHelper.existingEmail(req.body.email);
+    const user:any = await getRepository(User).findOne({ id: req.userId });
+
+    try {
+      await getConnection().transaction(async transaction => {
+        if (userHelper.isNeedUserCommon(req.body)) {
+          await transaction.getRepository(User)
+            .update(req.userId, await userHelper.commonFactoryEdit(req));
+        }
+
+        if (userHelper.isNeedAddressCommon(req.body)) {
+          await transaction.getRepository(Address)
+            .update(req.userId, userHelper.commonAddressFactoryEdit(req));
+        }
+
+        if (req.file) await deleteCloudinary(user.idPhotoProfile);
+      });
+    } catch (err) {
+      throw new Error(ResponseCode.E_000_001);
+    }
   }
 }
 
