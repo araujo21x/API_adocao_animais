@@ -12,6 +12,7 @@ import isPostalCodeValid from '../../helpers/isPostalCodeValid';
 import dateValidation from '../../helpers/DateValidations';
 import isLatitudeValid from '../../helpers/isLatitudeValid';
 import isLongitudeValid from '../../helpers/isLongitudeValid';
+import hashPassword from '../../helpers/hashPassword';
 import { uploadCloud } from '../../helpers/cloudinary';
 
 class UserHelper {
@@ -74,7 +75,7 @@ class UserHelper {
     }
     if (name) user.name = name;
     if (email) user.email = email;
-    if (password) user.password = password;
+    if (password) user.password = hashPassword(password);
     if (telephone) user.telephone = telephone;
     if (whatsApp) user.whatsApp = whatsApp;
     return user;
@@ -148,7 +149,7 @@ class UserHelper {
     if (lastName) user.lastName = lastName;
     if (birthday) user.birthday = dateValidation.ConvertClientToServer(birthday);
     if (email) user.email = email;
-    if (password) user.password = password;
+    if (password) user.password = hashPassword(password);
     if (telephone) user.telephone = telephone;
     if (whatsApp) user.whatsApp = whatsApp;
     return user;

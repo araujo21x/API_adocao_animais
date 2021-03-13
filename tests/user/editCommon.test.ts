@@ -61,7 +61,7 @@ describe('Suit de tests for edit Common user ', (): void => {
       .field(editUser());
 
     expect(status).toBe(401);
-    testErrors(error, 'No token provided');
+    testErrors(error, 'token error');
     done();
   });
 
