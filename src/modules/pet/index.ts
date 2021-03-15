@@ -9,4 +9,6 @@ const router = Router();
 router.route('/v1/pets/register')
   .post(auth, multer(multerConfig).array('photos'), controller.register);
 
+router.route('/v1/pets/edit/:id')
+  .put(auth, controller.edit);
 export default router;

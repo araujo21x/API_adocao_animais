@@ -54,6 +54,8 @@ export enum ResponseCode {
   // Mensagens [upload].
   E_004_001 = '004-001',
   E_004_002 = '004-002',
-   // Mensagens [edit User].
-   E_005_001 = '005-001',
+  // Mensagens [edit User].
+  E_005_001 = '005-001',
+  // Mensagens [edit Pet].
+  E_006_001 = '006-001',
 }

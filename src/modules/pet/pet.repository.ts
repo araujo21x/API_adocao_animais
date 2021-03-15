@@ -11,6 +11,11 @@ class PetRepository {
     return res.status(200).jsonp();
   }
 
+  public async edit (req: Request, res: Response): Promise<Response> {
+    await this.editPet(req);
+    return res.status(200).jsonp();
+  }
+
   private async storePet (req: Request): Promise<void> {
     petHelper.isPetFieldsValid(req);
     const user = await petHelper.userIsValid(req.userId);
@@ -24,6 +29,10 @@ class PetRepository {
     } catch (err) {
       throw new Error(ResponseCode.E_000_001);
     }
+  }
+
+  private async editPet (req: Request): Promise<void> {
+
   }
 }
 
