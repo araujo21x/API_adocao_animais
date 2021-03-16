@@ -248,5 +248,11 @@ export const ResponseMessages: any = {
     ptBR: 'Foto é obrigatório.',
     en: '',
     es: ''
+  },
+  // delete pet photo
+  '009-001': {
+    ptBR: 'Animal não encontrado.',
+    en: '',
+    es: ''
   }
 };

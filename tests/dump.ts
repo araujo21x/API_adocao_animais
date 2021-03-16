@@ -130,11 +130,16 @@ async function Dump () {
 
       const userPhotoPet = await transaction.save(userFactory('PhotoPet', '74987456321', '74987456321', 'common', emailCommon(4), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'add e delete photo pet'));
       await transaction.save(petFactory(userPhotoPet, 'pet add photo 1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
-      const deletePet = await transaction.save(petFactory(userPhotoPet, 'pet delete photo 1', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+
+      const deletePhotoPet = await transaction.save(petFactory(userPhotoPet, 'pet delete photo 1', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
       const deletePhotoPet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet Remove 1');
       const deletePhotoPet2 = await upload(path.resolve(__dirname, 'files', 'imgPet2.jpg'), 'Pet', 'Pet Remove 2');
-      await transaction.save(petPhotoFactory(deletePet, deletePhotoPet1.url, deletePhotoPet1.idPhoto));
-      await transaction.save(petPhotoFactory(deletePet, deletePhotoPet2.url, deletePhotoPet2.idPhoto));
+      await transaction.save(petPhotoFactory(deletePhotoPet, deletePhotoPet1.url, deletePhotoPet1.idPhoto));
+      await transaction.save(petPhotoFactory(deletePhotoPet, deletePhotoPet2.url, deletePhotoPet2.idPhoto));
+
+      const deletePet = await transaction.save(petFactory(userPhotoPet, 'pet delete', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+      const deletePet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet delete 1');
+      await transaction.save(petPhotoFactory(deletePet, deletePet1.url, deletePet1.idPhoto));
     });
   } catch (err) {
     console.log(err);

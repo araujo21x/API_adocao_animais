@@ -63,5 +63,7 @@ export enum ResponseCode {
   E_007_002 = '007-002',
   E_007_003 = '007-003',
   // Mensagens [add photo Pet].
-  E_008_001 = '008-001'
+  E_008_001 = '008-001',
+  // Mensagens [add photo Pet].
+  E_009_001 = '009-001'
 }
