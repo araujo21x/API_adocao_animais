@@ -24,6 +24,14 @@ class PetController {
     }
   }
 
+  public async delete (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.delete(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
   public async deletePhoto (req: Request, res: Response): Promise<Response> {
     try {
       return await repository.deletePhoto(req, res);

@@ -7,7 +7,7 @@ import { emailCommon } from '../fields';
 import startConnection from '../../src/database/index';
 import Pet from '../../src/database/entity/Pet.entity';
 
-const endPoint: string = '/v1/pets/edit/';
+const endPoint: string = '/v1/pets/';
 const request = supertest(app);
 
 const editPet = () => ({
