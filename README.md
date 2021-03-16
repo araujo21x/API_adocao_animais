@@ -14,3 +14,6 @@ Projeto feito para a disciplina do sétimo semestre Web II, como trabalho final 
 * **TypeORM** (ORM)
 * **Jest** (Framework de Teste)
 * **MySQL** (Banco de dados relacional)
+
+## ** Rotas **
+### User
