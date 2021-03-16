@@ -52,7 +52,8 @@ class PetRepository {
   private async removePhoto (req: Request): Promise<void> {
     if (!req.body.idPhoto) throw new Error(ResponseCode.E_007_001);
     await petHelper.isUsersPet(req);
-    const idPhotoTable:number = await petHelper.checkDeletePhotos(req);
+    const idPhotoTable: number = await petHelper.checkDeletePhotos(req);
+
     try {
       await getRepository(PetPhoto).delete({ id: idPhotoTable });
       await deleteCloudinary(req.body.idPhoto);
@@ -62,8 +63,19 @@ class PetRepository {
     }
   }
 
-  private async storePhoto (req: Request): Promise<void> {
+  private async storePhoto (req: Request): Promise<PetPhoto> {
+    if (!req.file) throw new Error(ResponseCode.E_008_001);
+    await petHelper.isUsersPet(req);
+    const pet: Pet = await petHelper.checkAddPhotos(req);
 
+    try {
+      const photoPet = await getRepository(PetPhoto)
+        .save(await petHelper.petPhotosFactory(req, pet));
+      return photoPet[0];
+    } catch (err) {
+      if (err.message === '004-001') throw new Error(ResponseCode.E_004_001);
+      else throw new Error(ResponseCode.E_000_001);
+    }
   }
 }
 

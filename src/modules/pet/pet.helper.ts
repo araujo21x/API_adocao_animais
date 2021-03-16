@@ -166,5 +166,18 @@ class PetHelper {
 
     return idTable[0].id;
   }
+
+  public async checkAddPhotos (req: Request): Promise<Pet> {
+    const id: number = Number(req.params.id);
+
+    const pet:any = await getRepository(Pet).createQueryBuilder('pet')
+      .where('pet.id = :id', { id })
+      .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
+      .getOne();
+
+    if (pet.petPhotos.length > 2) throw new Error(ResponseCode.E_002_008);
+
+    return pet;
+  }
 }
 export default new PetHelper();

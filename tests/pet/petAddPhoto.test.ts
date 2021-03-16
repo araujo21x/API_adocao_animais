@@ -69,7 +69,7 @@ describe('Suit de tests for add Photo pet ', (): void => {
       .set('authorization', `Bearer ${token}`)
       .attach('photo', filePath)
       .field({});
-    const { status, body: { result } } = await request.post(`${endPoint}${idError}`)
+    const { status, body: { result } } = await request.post(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
       .attach('photo', filePath)
       .field({});
@@ -82,10 +82,20 @@ describe('Suit de tests for add Photo pet ', (): void => {
   test(`[ 006-001 ] - [ ${endPoint}:id ]`, async done => {
     const { status, body: { result } } = await request.post(`${endPoint}${idError}`)
       .set('authorization', `Bearer ${token}`)
-      .send();
+      .attach('photo', filePath)
+      .field({});
 
     expect(status).toBe(404);
     testErrors(result, 'Animal não pertence a usuário logado.');
+    done();
+  });
+  test(`[ 008-001 ] - [ ${endPoint}:id ]`, async done => {
+    const { status, body: { result } } = await request.post(`${endPoint}${id}`)
+      .set('authorization', `Bearer ${token}`)
+      .field({});
+
+    expect(status).toBe(404);
+    testErrors(result, 'Foto é obrigatório.');
     done();
   });
 });

@@ -242,5 +242,11 @@ export const ResponseMessages: any = {
     ptBR: 'idPhoto não pertence ao animal.',
     en: '',
     es: ''
+  },
+  // add pet photo
+  '008-001': {
+    ptBR: 'Foto é obrigatório.',
+    en: '',
+    es: ''
   }
 };
