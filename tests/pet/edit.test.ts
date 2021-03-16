@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import path from 'path';
 import { getRepository } from 'typeorm';
 
 import app from '../../src/server';
@@ -10,7 +9,6 @@ import Pet from '../../src/database/entity/Pet.entity';
 
 const endPoint: string = '/v1/pets/edit/';
 const request = supertest(app);
-const filePath = path.resolve(__dirname, '..', 'files', 'imgProfile1.png');
 
 const editPet = () => ({
   name: 'editado com Sucesso',
@@ -25,6 +23,7 @@ const editPet = () => ({
   hairColor: 'Branco',
   feature: 'Problema no olho esquerdo'
 });
+
 let token: string;
 let id: number;
 let idError: number;
@@ -43,20 +42,19 @@ beforeAll(async () => {
 describe('Suit de tests for edit pet ', (): void => {
   test(`edit pet [ success ] [ ${endPoint}:id ]`,
     async (done: jest.DoneCallback) => {
+      const send = editPet();
       const { status, body } = await request.put(`${endPoint}${id}`)
         .set('authorization', `Bearer ${token}`)
-        .attach('photoProfile', filePath)
-        .field(editPet());
+        .send(send);
 
       expect(status).toBe(200);
       expect(body).toBeTruthy();
-
       done();
     });
 
   test(`[ No token provided ] - [ ${endPoint}:id ]`, async done => {
     const { status, body: { error } } = await request.put(`${endPoint}${id}`)
-      .field(editPet());
+      .send(editPet());
 
     expect(status).toBe(401);
     testErrors(error, 'No token provided');
@@ -66,7 +64,7 @@ describe('Suit de tests for edit pet ', (): void => {
   test(`[ token error ] - [ ${endPoint}:id ]`, async done => {
     const { status, body: { error } } = await request.put(`${endPoint}${id}`)
       .set('authorization', 'Bearer djfaklsdjflajsldjfljkas')
-      .field(editPet());
+      .send(editPet());
 
     expect(status).toBe(401);
     testErrors(error, 'token error');
@@ -78,7 +76,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.sex = 'masculino';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'Sexo informado não é valido.');
@@ -90,7 +88,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.status = 'adotado';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'Status informado inválido.');
@@ -102,7 +100,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.species = 'papagaio';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'Especie informado inválido, EX: gato ou cachorro.');
@@ -114,7 +112,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.phase = 'feto';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'fase informada inválida.');
@@ -126,7 +124,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.castration = 'erro';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'Castração informada inválida.');
@@ -138,7 +136,7 @@ describe('Suit de tests for edit pet ', (): void => {
     send.vaccination = 'erro';
     const { status, body: { result } } = await request.put(`${endPoint}${id}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
     testErrors(result, 'Vacinação informada inválida.');
@@ -149,10 +147,10 @@ describe('Suit de tests for edit pet ', (): void => {
     const send: any = editPet();
     const { status, body: { result } } = await request.put(`${endPoint}${idError}`)
       .set('authorization', `Bearer ${token}`)
-      .field(send);
+      .send(send);
 
     expect(status).toBe(404);
-    testErrors(result, 'Vacinação informada inválida.');
+    testErrors(result, 'Animal não pertence a usuário logado.');
     done();
   });
 });
