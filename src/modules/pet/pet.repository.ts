@@ -18,6 +18,11 @@ class PetRepository {
     return res.status(200).jsonp({});
   }
 
+  public async delete (req: Request, res: Response): Promise<Response> {
+    await this.deletePet(req);
+    return res.status(200).jsonp({});
+  }
+
   public async deletePhoto (req: Request, res: Response): Promise<Response> {
     await this.removePhoto(req);
     return res.status(200).jsonp({});
@@ -47,6 +52,22 @@ class PetRepository {
     await petHelper.isUsersPet(req);
     await getRepository(Pet)
       .update(Number(req.params.id), petHelper.petFactoryEdit(req.body));
+  }
+
+  private async deletePet (req: Request): Promise<void> {
+    await petHelper.isUsersPet(req);
+    const id: number = Number(req.params.id);
+    try {
+      const photosPet = await getRepository(PetPhoto).find({ where: { pet: id } });
+      getRepository(Pet).delete({ id });
+      if (photosPet.length > 0) {
+        photosPet.forEach(async photo => {
+          await deleteCloudinary(photo.idPhoto);
+        });
+      }
+    } catch (err) {
+      throw new Error(ResponseCode.E_000_001);
+    }
   }
 
   private async removePhoto (req: Request): Promise<void> {
