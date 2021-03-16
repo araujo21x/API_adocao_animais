@@ -42,7 +42,7 @@ describe('Suit de tests register pet', (): void => {
         .field(pet());
 
       expect(status).toBe(200);
-      expect(body).toBeFalsy();
+      expect(body).toBeTruthy();
 
       done();
     });

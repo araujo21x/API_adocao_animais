@@ -8,7 +8,7 @@ import { password, emailONG, emailCommon } from './fields';
 
 import User from '../src/database/entity/User.entity';
 import Address from '../src/database/entity/Address.entity';
-
+import Pet from '../src/database/entity/Pet.entity';
 config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 const userFactory = (
   name: string,
@@ -19,7 +19,7 @@ const userFactory = (
   photoProfile: string,
   idPhotoProfile: string,
   lastName?: string
-) => {
+):User => {
   const newUser = new User();
   newUser.name = name;
   newUser.lastName = lastName!;
@@ -35,7 +35,7 @@ const userFactory = (
 };
 
 const addressFactory = (
-  user:User,
+  user: User,
   uf: string,
   city: string,
   postalCode: string,
@@ -45,7 +45,7 @@ const addressFactory = (
   complement: string,
   latitude?: number,
   longitude?: number
-) => {
+):Address => {
   const newAddress = new Address();
   newAddress.uf = uf;
   newAddress.city = city;
@@ -59,7 +59,35 @@ const addressFactory = (
   newAddress.longitude = longitude!;
   return newAddress;
 };
-
+const petFactory = (
+  user: User,
+  name: string,
+  sex: string,
+  status: string,
+  species: string,
+  phase: string,
+  castration: string,
+  race: string,
+  vaccination: string,
+  eyeColor: string,
+  hairColor: string,
+  feature: string
+):Pet => {
+  const pet = new Pet();
+  pet.user = user;
+  pet.name = name;
+  pet.sex = sex;
+  pet.status = status;
+  pet.species = species;
+  pet.phase = phase;
+  pet.castration = castration;
+  pet.race = race;
+  pet.vaccination = vaccination;
+  pet.eyeColor = eyeColor;
+  pet.hairColor = hairColor;
+  pet.feature = feature;
+  return pet;
+};
 async function Dump () {
   try {
     await startConnection();
@@ -77,6 +105,13 @@ async function Dump () {
       const photoUserONG = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite User ONG 1');
       const userEditONG = await transaction.save(userFactory('editONG', '74987456321', '74987456321', 'ong', emailONG(3), photoUserONG.url, photoUserONG.idPhoto));
       await transaction.save(addressFactory(userEditONG, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
+
+      const photoUserEditPet = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite pet 1');
+      const userEditPet = await transaction.save(userFactory('editPet', '74987456321', '74987456321', 'common', emailCommon(3), photoUserEditPet.url, photoUserEditPet.idPhoto, 'test edit pet'));
+      await transaction.save(addressFactory(userEditPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
+      await transaction.save(petFactory(userEditPet, 'loganEdit1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
+
+      await transaction.save(petFactory(userLogin, 'erroEditId', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
     });
   } catch (err) {
     console.log(err);

@@ -219,5 +219,11 @@ export const ResponseMessages: any = {
     ptBR: 'Não é possível modificar tipo de usuário.',
     en: '',
     es: ''
+  },
+  // edit pet
+  '006-001': {
+    ptBR: 'Animal não pertence a usuário logado.',
+    en: '',
+    es: ''
   }
 };
