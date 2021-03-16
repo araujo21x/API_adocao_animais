@@ -94,7 +94,7 @@ class PetHelper {
     return pet;
   };
 
-  public petFactoryEdit (body:any) {
+  public petFactoryEdit (body: any) {
     const {
       name,
       sex,
@@ -114,11 +114,11 @@ class PetHelper {
     if (eyeColor) pet.eyeColor = eyeColor;
     if (hairColor) pet.hairColor = hairColor;
     if (feature) pet.feature = feature;
-    if (sex)pet.sex = sex;
-    if (status)pet.status = status;
-    if (species)pet.species = species;
-    if (phase)pet.phase = phase;
-    if (castration)pet.castration = castration;
+    if (sex) pet.sex = sex;
+    if (status) pet.status = status;
+    if (species) pet.species = species;
+    if (phase) pet.phase = phase;
+    if (castration) pet.castration = castration;
     if (vaccination) pet.vaccination = vaccination;
     return pet;
   }
@@ -143,13 +143,28 @@ class PetHelper {
     return user;
   }
 
-  public async isUsersPet (req:Request): Promise<void> {
-    const id:number = Number(req.params.id);
-    const pet:any = await getRepository(Pet).createQueryBuilder('pet')
+  public async isUsersPet (req: Request): Promise<void> {
+    const id: number = Number(req.params.id);
+    const pet: any = await getRepository(Pet).createQueryBuilder('pet')
       .where('pet.id = :id', { id })
       .leftJoinAndSelect('pet.user', 'user')
       .getOne();
     if (pet.user.id !== req.userId) throw new Error(ResponseCode.E_006_001);
+  }
+
+  public async checkDeletePhotos (req: Request): Promise<number> {
+    const id: number = Number(req.params.id);
+    const photos: Array<PetPhoto> = await getRepository(PetPhoto).find({ where: { pet: id } });
+
+    if (photos.length <= 1) throw new Error(ResponseCode.E_007_002);
+
+    const idTable: Array<PetPhoto> = photos.filter((photo: PetPhoto) => {
+      return photo.idPhoto === req.body.idPhoto;
+    });
+
+    if (idTable.length === 0) throw new Error(ResponseCode.E_007_003);
+
+    return idTable[0].id;
   }
 }
 export default new PetHelper();

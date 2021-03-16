@@ -11,4 +11,9 @@ router.route('/v1/pets/register')
 
 router.route('/v1/pets/edit/:id')
   .put(auth, controller.edit);
+
+router.route('/v1/petsPhoto/:id')
+  .delete(auth, controller.deletePhoto)
+  .post(auth, multer(multerConfig).single('photo'), controller.registerPhoto);
+
 export default router;

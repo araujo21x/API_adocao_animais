@@ -9,7 +9,10 @@ import { password, emailONG, emailCommon } from './fields';
 import User from '../src/database/entity/User.entity';
 import Address from '../src/database/entity/Address.entity';
 import Pet from '../src/database/entity/Pet.entity';
+import PetPhoto from '../src/database/entity/PetPhoto.entity';
+
 config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
+
 const userFactory = (
   name: string,
   whatsApp: string,
@@ -19,7 +22,7 @@ const userFactory = (
   photoProfile: string,
   idPhotoProfile: string,
   lastName?: string
-):User => {
+): User => {
   const newUser = new User();
   newUser.name = name;
   newUser.lastName = lastName!;
@@ -45,7 +48,7 @@ const addressFactory = (
   complement: string,
   latitude?: number,
   longitude?: number
-):Address => {
+): Address => {
   const newAddress = new Address();
   newAddress.uf = uf;
   newAddress.city = city;
@@ -59,6 +62,7 @@ const addressFactory = (
   newAddress.longitude = longitude!;
   return newAddress;
 };
+
 const petFactory = (
   user: User,
   name: string,
@@ -72,7 +76,7 @@ const petFactory = (
   eyeColor: string,
   hairColor: string,
   feature: string
-):Pet => {
+): Pet => {
   const pet = new Pet();
   pet.user = user;
   pet.name = name;
@@ -87,6 +91,18 @@ const petFactory = (
   pet.hairColor = hairColor;
   pet.feature = feature;
   return pet;
+};
+
+const petPhotoFactory = (
+  pet: Pet,
+  photo: string,
+  idPhoto: string
+): any => {
+  const petPhoto = new PetPhoto();
+  petPhoto.pet = pet;
+  petPhoto.photo = photo;
+  petPhoto.idPhoto = idPhoto;
+  return petPhoto;
 };
 async function Dump () {
   try {
@@ -110,8 +126,15 @@ async function Dump () {
       const userEditPet = await transaction.save(userFactory('editPet', '74987456321', '74987456321', 'common', emailCommon(3), photoUserEditPet.url, photoUserEditPet.idPhoto, 'test edit pet'));
       await transaction.save(addressFactory(userEditPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userEditPet, 'loganEdit1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
-
       await transaction.save(petFactory(userLogin, 'erroEditId', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
+
+      const userPhotoPet = await transaction.save(userFactory('PhotoPet', '74987456321', '74987456321', 'common', emailCommon(4), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'add e delete photo pet'));
+      await transaction.save(petFactory(userPhotoPet, 'pet add photo 1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+      const deletePet = await transaction.save(petFactory(userPhotoPet, 'pet delete photo 1', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+      const deletePhotoPet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet Remove 1');
+      const deletePhotoPet2 = await upload(path.resolve(__dirname, 'files', 'imgPet2.jpg'), 'Pet', 'Pet Remove 2');
+      await transaction.save(petPhotoFactory(deletePet, deletePhotoPet1.url, deletePhotoPet1.idPhoto));
+      await transaction.save(petPhotoFactory(deletePet, deletePhotoPet2.url, deletePhotoPet2.idPhoto));
     });
   } catch (err) {
     console.log(err);

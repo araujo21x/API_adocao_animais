@@ -225,5 +225,22 @@ export const ResponseMessages: any = {
     ptBR: 'Animal não pertence a usuário logado.',
     en: '',
     es: ''
+  },
+  // remove pet photo
+
+  '007-001': {
+    ptBR: 'idPhoto é obrigatório.',
+    en: '',
+    es: ''
+  },
+  '007-002': {
+    ptBR: 'Você só tem uma foto, é obrigatório ter ao menos uma foto do animal.',
+    en: '',
+    es: ''
+  },
+  '007-003': {
+    ptBR: 'idPhoto não pertence ao animal.',
+    en: '',
+    es: ''
   }
 };
