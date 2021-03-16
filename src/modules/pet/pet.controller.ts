@@ -23,6 +23,23 @@ class PetController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async deletePhoto (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.deletePhoto(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async registerPhoto (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.registerPhoto(req, res);
+    } catch (err) {
+      if (req.file) fs.unlinkSync(req.file.path);
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new PetController();

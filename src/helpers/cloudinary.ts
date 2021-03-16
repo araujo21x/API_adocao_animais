@@ -19,10 +19,12 @@ export const upload = async (file: string, folder: string, fileName: string): Pr
     return { url: value.url, idPhoto: value.public_id };
   } catch (err) { throw new Error(ResponseCode.E_004_001); }
 };
+
 export const deleteCloudinary = async (publicIdPhoto: string): Promise<void> => {
   const { result } = await cloudinary.v2.uploader.destroy(publicIdPhoto);
   if (result !== 'ok') throw new Error(ResponseCode.E_004_002);
 };
+
 export const uploadCloud = async (req: Request, folder: string) => {
   const files: any = req.files ?? [req.file];
 
