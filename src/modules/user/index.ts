@@ -16,4 +16,7 @@ router.route('/v1/user/edit')
 router.route('/v1/login')
   .post(UserController.login);
 
+router.route('/v1/recoverPassword')
+  .post(UserController.recoverPassword);
+
 export default router;

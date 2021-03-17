@@ -34,6 +34,15 @@ class UserHelper {
     isPasswordValid(password);
   }
 
+  public recoverFactory (): any {
+    const newPassword:string = Math.random().toString(36).slice(-15);
+    const userChanges: any = {};
+    userChanges.passwordChange = true;
+    userChanges.passwordChangeDate = new Date().toISOString();
+    userChanges.password = hashPassword(newPassword);
+    return { userChanges, newPassword };
+  }
+
   public isOngValidEdit (req: Request): void {
     this.userFieldsIsValidEdit(req.body);
     this.addressFieldsIsValidEdit(req.body);
@@ -69,7 +78,7 @@ class UserHelper {
     const { name, whatsApp, telephone, email, password } = req.body;
     const user: any = {};
     if (req.file) {
-      const photo:any = await uploadCloud(req, 'User');
+      const photo: any = await uploadCloud(req, 'User');
       user.photoProfile = photo[0].url;
       user.idPhotoProfile = photo[0].idPhoto;
     }

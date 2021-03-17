@@ -254,5 +254,11 @@ export const ResponseMessages: any = {
     ptBR: 'Animal não encontrado.',
     en: '',
     es: ''
+  },
+  // send email recover password
+  '010-001': {
+    ptBR: 'Erro ao enviar email de recuperação de senha.',
+    en: '',
+    es: ''
   }
 };
