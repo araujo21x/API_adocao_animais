@@ -140,6 +140,8 @@ async function Dump () {
       const deletePet = await transaction.save(petFactory(userPhotoPet, 'pet delete', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
       const deletePet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet delete 1');
       await transaction.save(petPhotoFactory(deletePet, deletePet1.url, deletePet1.idPhoto));
+
+      await transaction.save(userFactory('recoveryPassword', '74987456321', '74987456321', 'ong', emailONG(4), 'sssss', 'ddddd'));
     });
   } catch (err) {
     console.log(err);

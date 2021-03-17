@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import { getRepository, getConnection } from 'typeorm';
 import bcryptjs from 'bcryptjs';
 
+import { transport, mailOptions } from '../../helpers/transport';
 import { ResponseCode } from '../../helpers/response/responseCode';
 import { deleteCloudinary } from '../../helpers/cloudinary';
 import userHelper from './user.helper';
 import isUserValid from '../../helpers/isUserValid';
+import isEmailValid from '../../helpers/isEmailValid';
 import token from '../../helpers/generateJWT';
 import User from '../../database/entity/User.entity';
 import Address from '../../database/entity/Address.entity';
@@ -20,15 +22,20 @@ class UserRepository {
     return res.jsonp(answer);
   }
 
-  public async login (req: Request, res: Response): Promise<Response> {
-    return res.jsonp(await this.autheticate(req.body));
-  }
-
   public async edit (req: Request, res: Response): Promise<Response> {
     const { userType } = req;
     if (req.body.type) throw new Error(ResponseCode.E_005_001);
     if (userType === 'ong') await this.editOng(req);
     if (userType === 'common') await this.editCommon(req);
+    return res.jsonp({});
+  }
+
+  public async login (req: Request, res: Response): Promise<Response> {
+    return res.jsonp(await this.autheticate(req.body));
+  }
+
+  public async recoverPassword (req: Request, res: Response): Promise<Response> {
+    await this.retrieveByEmail(req);
     return res.jsonp({});
   }
 
@@ -66,23 +73,10 @@ class UserRepository {
     return token(user.id, user.type);
   }
 
-  private async autheticate (body: any): Promise<string> {
-    const { email, password } = body;
-    userHelper.isLoginFieldsValid(body);
-
-    const user = await getRepository(User).findOne({ email });
-    if (!user) throw new Error(ResponseCode.E_003_001);
-
-    const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) throw new Error(ResponseCode.E_003_002);
-
-    return token(user.id, user.type);
-  }
-
-  private async editOng (req:Request):Promise<void> {
+  private async editOng (req: Request): Promise<void> {
     userHelper.isOngValidEdit(req);
     if (req.body.email) await userHelper.existingEmail(req.body.email);
-    const user:any = await getRepository(User).findOne({ id: req.userId });
+    const user: any = await getRepository(User).findOne({ id: req.userId });
 
     try {
       await getConnection().transaction(async transaction => {
@@ -103,10 +97,10 @@ class UserRepository {
     }
   }
 
-  private async editCommon (req:Request):Promise<void> {
+  private async editCommon (req: Request): Promise<void> {
     userHelper.isCommonValidEdit(req);
     if (req.body.email) await userHelper.existingEmail(req.body.email);
-    const user:any = await getRepository(User).findOne({ id: req.userId });
+    const user: any = await getRepository(User).findOne({ id: req.userId });
 
     try {
       await getConnection().transaction(async transaction => {
@@ -124,6 +118,34 @@ class UserRepository {
       });
     } catch (err) {
       throw new Error(ResponseCode.E_000_001);
+    }
+  }
+
+  private async autheticate (body: any): Promise<string> {
+    const { email, password } = body;
+    userHelper.isLoginFieldsValid(body);
+
+    const user = await getRepository(User).findOne({ email });
+    if (!user) throw new Error(ResponseCode.E_003_001);
+
+    const validPassword = await bcryptjs.compare(password, user.password);
+    if (!validPassword) throw new Error(ResponseCode.E_003_002);
+
+    return token(user.id, user.type);
+  }
+
+  private async retrieveByEmail (req: Request): Promise<any> {
+    const { email } = req.body;
+    isEmailValid(email);
+
+    const user = await getRepository(User).findOne({ email });
+    if (!user) throw new Error(ResponseCode.E_003_001);
+    try {
+      const { userChanges, newPassword } = userHelper.recoverFactory();
+      await getRepository(User).update(user.id, userChanges);
+      await transport.sendMail(mailOptions(email, newPassword));
+    } catch (err) {
+      throw new Error(ResponseCode.E_010_001);
     }
   }
 }
