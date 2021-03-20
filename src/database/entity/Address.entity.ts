@@ -10,7 +10,7 @@ import {
 
 import User from './User.entity';
 
-@Entity({ name: 'Adresses' })
+@Entity({ name: 'adresses' })
 export default class Address {
   @PrimaryGeneratedColumn()
   id: number;
