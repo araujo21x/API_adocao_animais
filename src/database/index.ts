@@ -11,7 +11,8 @@ class Connection {
       logging: false,
       migrationsRun: true,
       entities: [path.join(__dirname, '/entity/*.entity{.ts,.js}')],
-      migrations: [path.join(__dirname, '/migrations/*{.ts,.js}')]
+      migrations: [path.join(__dirname, '/migrations/*{.ts,.js}')],
+      ssl: true
     });
   }
 }
