@@ -37,6 +37,22 @@ class UserController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async favoritePet (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.favoritePet(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async disfavorPet (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.disfavorPet(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new UserController();

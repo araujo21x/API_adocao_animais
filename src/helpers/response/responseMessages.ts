@@ -260,5 +260,16 @@ export const ResponseMessages: any = {
     ptBR: 'Erro ao enviar email de recuperação de senha.',
     en: '',
     es: ''
+  },
+  // send email recover password
+  '011-001': {
+    ptBR: 'Não foi encontrado o seu favoritar no animal informado.',
+    en: '',
+    es: ''
+  },
+  '011-002': {
+    ptBR: 'Id do animal é obrigatório.',
+    en: '',
+    es: ''
   }
 };

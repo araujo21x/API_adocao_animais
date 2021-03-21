@@ -11,6 +11,8 @@ import isEmailValid from '../../helpers/isEmailValid';
 import token from '../../helpers/generateJWT';
 import User from '../../database/entity/User.entity';
 import Address from '../../database/entity/Address.entity';
+import Pet from '../../database/entity/Pet.entity';
+import Favorite from '../../database/entity/Favorite.entity';
 
 class UserRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -37,6 +39,16 @@ class UserRepository {
   public async recoverPassword (req: Request, res: Response): Promise<Response> {
     await this.retrieveByEmail(req);
     return res.jsonp({});
+  }
+
+  public async favoritePet (req: Request, res: Response): Promise<Response> {
+    await this.favoritePetStore(req);
+    return res.status(200).jsonp({});
+  }
+
+  public async disfavorPet (req: Request, res: Response): Promise<Response> {
+    await this.favoritePetdelete(req);
+    return res.status(200).jsonp({});
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -147,6 +159,29 @@ class UserRepository {
     } catch (err) {
       throw new Error(ResponseCode.E_010_001);
     }
+  }
+
+  private async favoritePetStore (req: Request): Promise<void> {
+    if (!req.body.idPet) throw new Error(ResponseCode.E_011_002);
+    const user = await getRepository(User).findOne(req.userId);
+    const pet = await getRepository(Pet).findOne(req.body.idPet);
+    if (!pet) throw new Error(ResponseCode.E_009_001);
+
+    try {
+      await getRepository(Favorite).save({ pet, user });
+    } catch (err) {
+      throw new Error(ResponseCode.E_000_001);
+    }
+  }
+
+  private async favoritePetdelete (req: Request): Promise<void> {
+    if (!req.body.idPet) throw new Error(ResponseCode.E_011_002);
+
+    const favoritePet: (Favorite | undefined) = await getRepository(Favorite)
+      .findOne({ where: { pet: req.body.idPet, user: req.userId } });
+
+    if (!favoritePet) throw new Error(ResponseCode.E_011_001);
+    await getRepository(Favorite).delete(favoritePet.id);
   }
 }
 

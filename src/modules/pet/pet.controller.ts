@@ -9,7 +9,7 @@ class PetController {
       return await repository.register(req, res);
     } catch (err) {
       if (req.files.length > 0) {
-        const files:any = req.files;
+        const files: any = req.files;
         files.forEach((file: any) => fs.unlinkSync(file.path));
       }
       return responseError(res, err.message, 404);

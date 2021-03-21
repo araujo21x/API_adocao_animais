@@ -10,6 +10,7 @@ import User from '../src/database/entity/User.entity';
 import Address from '../src/database/entity/Address.entity';
 import Pet from '../src/database/entity/Pet.entity';
 import PetPhoto from '../src/database/entity/PetPhoto.entity';
+import Favorite from '../src/database/entity/Favorite.entity';
 
 config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 
@@ -104,6 +105,17 @@ const petPhotoFactory = (
   petPhoto.idPhoto = idPhoto;
   return petPhoto;
 };
+
+const favoriteFactory = (
+  pet: Pet,
+  user: User
+): Favorite => {
+  const favorite = new Favorite();
+  favorite.pet = pet;
+  favorite.user = user;
+  return favorite;
+};
+
 async function Dump () {
   try {
     await startConnection();
@@ -142,6 +154,13 @@ async function Dump () {
       await transaction.save(petPhotoFactory(deletePet, deletePet1.url, deletePet1.idPhoto));
 
       await transaction.save(userFactory('recoveryPassword', '74987456321', '74987456321', 'ong', emailONG(4), 'sssss', 'ddddd'));
+
+      const userFavoriteCreate = await transaction.save(userFactory('userFavoriteCreate', '74987456321', '74987456321', 'common', emailCommon(5), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'favorite pet'));
+      await transaction.save(petFactory(userFavoriteCreate, 'favorite pet', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+
+      const userFavoriteDelete = await transaction.save(userFactory('userFavoriteDelete', '74987456321', '74987456321', 'common', emailCommon(6), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'user Favorite Delete'));
+      const petdisfavor = await transaction.save(petFactory(userFavoriteDelete, 'pet Favorite Delete', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
+      await transaction.save(favoriteFactory(petdisfavor, userFavoriteDelete));
     });
   } catch (err) {
     console.log(err);
