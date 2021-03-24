@@ -277,5 +277,16 @@ export const ResponseMessages: any = {
     ptBR: 'Pagina é obrigatório.',
     en: '',
     es: ''
+  },
+  '012-002': {
+    ptBR: 'Tipo de pesquisa informado não é valida, precisa ser pet ou ong.',
+    en: '',
+    es: ''
+  },
+  // header user
+  '013-001': {
+    ptBR: 'usuário não encontrado.',
+    en: '',
+    es: ''
   }
 };

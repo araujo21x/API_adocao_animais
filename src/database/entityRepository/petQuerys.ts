@@ -5,8 +5,7 @@ import Pet from '../entity/Pet.entity';
 @EntityRepository(Pet)
 export default class PetQuerys extends Repository<Pet> {
   public async OldestLost (): Promise<Array<OrganizedPet>> {
-    const pets = await this.createQueryBuilder('pet')
-      .select()
+    const pets:Array<Pet> = await this.createQueryBuilder('pet')
       .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
       .leftJoinAndSelect('pet.user', 'user')
       .leftJoinAndSelect('user.address', 'address')
@@ -18,23 +17,24 @@ export default class PetQuerys extends Repository<Pet> {
     return organizePetFileds(pets);
   }
 
-  public async filter (params:any): Promise<Array<OrganizedPet>> {
-    const { page, city, uf, status } = params;
+  public async filter (queryParams: any): Promise<Array<OrganizedPet>> {
+    const { page, city, uf, status, species, sex, phase } = queryParams;
 
-    const pets = await this.createQueryBuilder('pet')
-      .select()
+    const pets: any = this.createQueryBuilder('pet')
       .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
       .leftJoinAndSelect('pet.user', 'user')
       .leftJoinAndSelect('user.address', 'address')
-      .where('pet.status = :status', { status })
-      .andWhere('address.city = :city', { city })
+      .where('address.city = :city', { city })
       .andWhere('address.uf = :uf', { uf })
       .orderBy('pet.createdAt', 'DESC')
       .skip(12 * (Number(page) - 1))
-      .take(12)
-      .getMany();
+      .take(12);
 
-    const test: Array<OrganizedPet> = organizePetFileds(pets);
-    return test;
+    if (status) pets.andWhere('pet.status = :status', { status });
+    if (sex) pets.andWhere('pet.sex = :sex', { sex });
+    if (phase)pets.andWhere('pet.phase = :phase', { phase });
+    if (species) pets.andWhere('pet.species = :species', { species });
+
+    return organizePetFileds(await pets.getMany());
   }
 }

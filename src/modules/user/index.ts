@@ -23,4 +23,9 @@ router.route('/v1/user/favoritePet')
   .post(auth, controller.favoritePet)
   .delete(auth, controller.disfavorPet);
 
+router.route('/v1/user/searchLocation')
+  .get(controller.allOngsLocation);
+
+router.route('/v1/user/searchUser')
+  .get(auth, controller.getUserHeaderData);
 export default router;

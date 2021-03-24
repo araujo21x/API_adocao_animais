@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { getRepository, getConnection } from 'typeorm';
+import { getRepository, getConnection, getCustomRepository } from 'typeorm';
 import bcryptjs from 'bcryptjs';
+import { OrganizedUserLocation, UserHeader } from '../../helpers/organizeUserFields';
 
 import { transport, mailOptions } from '../../helpers/transport';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -9,10 +10,13 @@ import userHelper from './user.helper';
 import isUserValid from '../../helpers/isUserValid';
 import isEmailValid from '../../helpers/isEmailValid';
 import token from '../../helpers/generateJWT';
+
 import User from '../../database/entity/User.entity';
 import Address from '../../database/entity/Address.entity';
 import Pet from '../../database/entity/Pet.entity';
 import Favorite from '../../database/entity/Favorite.entity';
+
+import UserQuerys from '../../database/entityRepository/userQuerys';
 
 class UserRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -49,6 +53,14 @@ class UserRepository {
   public async disfavorPet (req: Request, res: Response): Promise<Response> {
     await this.favoritePetdelete(req);
     return res.status(200).jsonp({});
+  }
+
+  public async allOngsLocation (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getOngsByLocation());
+  }
+
+  public async getUserHeaderData (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getUserHeader(req));
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -182,6 +194,14 @@ class UserRepository {
 
     if (!favoritePet) throw new Error(ResponseCode.E_011_001);
     await getRepository(Favorite).delete(favoritePet.id);
+  }
+
+  private async getOngsByLocation (): Promise<Array<OrganizedUserLocation>> {
+    return await getCustomRepository(UserQuerys).getAllOngsLocation();
+  }
+
+  private async getUserHeader (req: Request): Promise<UserHeader> {
+    return await getCustomRepository(UserQuerys).getHeader(req.userId);
   }
 }
 

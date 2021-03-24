@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getConnection, getCustomRepository, getRepository } from 'typeorm';
 import { OrganizedPet } from '../../helpers/organizePetFields';
+import { OrganizedUser } from '../../helpers/organizeUserFields';
 
 import { ResponseCode } from '../../helpers/response/responseCode';
 import { deleteCloudinary } from '../../helpers/cloudinary';
@@ -9,6 +10,7 @@ import PetPhoto from '../../database/entity/PetPhoto.entity';
 import Pet from '../../database/entity/Pet.entity';
 
 import PetQuerys from '../../database/entityRepository/petQuerys';
+import UserQuerys from '../../database/entityRepository/userQuerys';
 
 class PetRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -41,6 +43,19 @@ class PetRepository {
 
   public async lostLocation (req: Request, res: Response): Promise<Response> {
     return res.status(200).jsonp(await this.getLostLocation(req));
+  }
+
+  public async searchLocation (req: Request, res: Response): Promise<Response> {
+    const { typeSearch } = req.query;
+    let awswer: (Array<OrganizedPet> | Array<any>);
+    if (typeSearch !== 'pet' && typeSearch !== 'ong') throw new Error(ResponseCode.E_012_002);
+    if (typeSearch === 'pet') awswer = await this.searchLocationPet(req.query);
+    else awswer = await this.searchLocationOng(req.query);
+    return res.status(200).jsonp(awswer);
+  }
+
+  public async filterPets (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.completeFilter(req.query));
   }
 
   private async storePet (req: Request): Promise<void> {
@@ -117,9 +132,30 @@ class PetRepository {
 
   private async getLostLocation (req: Request): Promise<Array<OrganizedPet>> {
     const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
-    petHelper.validFilter(req.query);
+    petHelper.isLostLocation(req.query);
     req.query.status = 'lost';
     return await petQuerys.filter(req.query);
+  }
+
+  private async searchLocationPet (queryParams: any): Promise<Array<OrganizedPet>> {
+    petHelper.isLostLocation(queryParams);
+    if (queryParams.species !== 'cat' && queryParams.species !== 'dog') {
+      throw new Error(ResponseCode.E_002_003);
+    }
+    const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
+    return await petQuerys.filter(queryParams);
+  }
+
+  private async searchLocationOng (queryParams: any): Promise<Array<OrganizedUser>> {
+    petHelper.isLostLocation(queryParams);
+    const userQuerys: UserQuerys = getCustomRepository(UserQuerys);
+    return await userQuerys.filter(queryParams);
+  }
+
+  private async completeFilter (queryParams: any): Promise<Array<OrganizedPet>> {
+    petHelper.filterIsValid(queryParams);
+    const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
+    return await petQuerys.filter(queryParams);
   }
 }
 

@@ -64,6 +64,22 @@ class PetController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async searchLocation (req:Request, res:Response): Promise<Response> {
+    try {
+      return await repository.searchLocation(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async filterPets (req:Request, res:Response): Promise<Response> {
+    try {
+      return await repository.filterPets(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new PetController();

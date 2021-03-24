@@ -182,11 +182,28 @@ class PetHelper {
     return pet;
   }
 
-  public validFilter (params: any): void {
-    const { uf, city, page } = params;
+  public isLostLocation (queryParams: any): void {
+    const { uf, city, page } = queryParams;
     isUFValid(uf);
     if (!city) throw new Error(ResponseCode.E_001_014);
     if (!page || isNaN(page)) throw new Error(ResponseCode.E_012_001);
+  }
+
+  public filterIsValid (queryParams: any): void {
+    this.isLostLocation(queryParams);
+    const { species, status, sex, phase } = queryParams;
+    if (sex) {
+      if (!this.validGenders.includes(sex)) throw new Error(ResponseCode.E_002_001);
+    }
+    if (status) {
+      if (!this.validRegisterStatus.includes(status)) throw new Error(ResponseCode.E_002_002);
+    }
+    if (species) {
+      if (!this.validSpecies.includes(species)) throw new Error(ResponseCode.E_002_003);
+    }
+    if (phase) {
+      if (!this.validPhase.includes(phase)) throw new Error(ResponseCode.E_002_004);
+    }
   }
 }
 export default new PetHelper();

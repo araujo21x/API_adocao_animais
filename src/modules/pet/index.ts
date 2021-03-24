@@ -17,10 +17,9 @@ router.route('/v1/petsPhoto/:id')
   .delete(auth, controller.deletePhoto)
   .post(auth, multer(multerConfig).single('photo'), controller.registerPhoto);
 
-router.route('/v1/pets/lost/oldest')
-  .get(controller.oldestLost);
-
-router.route('/v1/pets/lost/searchLocation')
-  .get(controller.lostLocation);
+router.route('/v1/pets/lost/oldest').get(controller.oldestLost);
+router.route('/v1/pets/lost/searchLocation').get(controller.lostLocation);
+router.route('/v1/searchLocation').get(controller.searchLocation);
+router.route('/v1/pet/filter').get(controller.filterPets);
 
 export default router;
