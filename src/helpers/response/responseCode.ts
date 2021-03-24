@@ -70,5 +70,7 @@ export enum ResponseCode {
   E_010_001 = '010-001',
   // Mensagens [favorite pet].
   E_011_001 = '011-001',
-  E_011_002 = '011-002'
+  E_011_002 = '011-002',
+  // Mensagens [filter pet].
+  E_012_001 = '012-001',
 }

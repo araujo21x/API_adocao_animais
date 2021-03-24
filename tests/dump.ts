@@ -141,6 +141,7 @@ async function Dump () {
       await transaction.save(petFactory(userLogin, 'erroEditId', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
 
       const userPhotoPet = await transaction.save(userFactory('PhotoPet', '74987456321', '74987456321', 'common', emailCommon(4), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'add e delete photo pet'));
+      await transaction.save(addressFactory(userPhotoPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userPhotoPet, 'pet add photo 1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
 
       const deletePhotoPet = await transaction.save(petFactory(userPhotoPet, 'pet delete photo 1', 'female', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
@@ -153,12 +154,15 @@ async function Dump () {
       const deletePet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet delete 1');
       await transaction.save(petPhotoFactory(deletePet, deletePet1.url, deletePet1.idPhoto));
 
-      await transaction.save(userFactory('recoveryPassword', '74987456321', '74987456321', 'ong', emailONG(4), 'sssss', 'ddddd'));
+      const userRecoveryPassword = await transaction.save(userFactory('recoveryPassword', '74987456321', '74987456321', 'ong', emailONG(4), 'sssss', 'ddddd'));
+      await transaction.save(addressFactory(userRecoveryPassword, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
       const userFavoriteCreate = await transaction.save(userFactory('userFavoriteCreate', '74987456321', '74987456321', 'common', emailCommon(5), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'favorite pet'));
+      await transaction.save(addressFactory(userFavoriteCreate, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userFavoriteCreate, 'favorite pet', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
 
       const userFavoriteDelete = await transaction.save(userFactory('userFavoriteDelete', '74987456321', '74987456321', 'common', emailCommon(6), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'user Favorite Delete'));
+      await transaction.save(addressFactory(userFavoriteDelete, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       const petdisfavor = await transaction.save(petFactory(userFavoriteDelete, 'pet Favorite Delete', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
       await transaction.save(favoriteFactory(petdisfavor, userFavoriteDelete));
     });

@@ -3,6 +3,8 @@ import { getRepository } from 'typeorm';
 
 import { ResponseCode } from '../../helpers/response/responseCode';
 import { uploadCloud } from '../../helpers/cloudinary';
+import isUFValid from '../../helpers/isUFValid';
+
 import Pet from '../../database/entity/Pet.entity';
 import User from '../../database/entity/User.entity';
 import PetPhoto from '../../database/entity/PetPhoto.entity';
@@ -170,7 +172,7 @@ class PetHelper {
   public async checkAddPhotos (req: Request): Promise<Pet> {
     const id: number = Number(req.params.id);
 
-    const pet:any = await getRepository(Pet).createQueryBuilder('pet')
+    const pet: any = await getRepository(Pet).createQueryBuilder('pet')
       .where('pet.id = :id', { id })
       .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
       .getOne();
@@ -178,6 +180,13 @@ class PetHelper {
     if (pet.petPhotos.length > 2) throw new Error(ResponseCode.E_002_008);
 
     return pet;
+  }
+
+  public validFilter (params: any): void {
+    const { uf, city, page } = params;
+    isUFValid(uf);
+    if (!city) throw new Error(ResponseCode.E_001_014);
+    if (!page || isNaN(page)) throw new Error(ResponseCode.E_012_001);
   }
 }
 export default new PetHelper();

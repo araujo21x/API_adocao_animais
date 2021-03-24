@@ -271,5 +271,11 @@ export const ResponseMessages: any = {
     ptBR: 'Id do animal é obrigatório.',
     en: '',
     es: ''
+  },
+  // filter pet
+  '012-001': {
+    ptBR: 'Pagina é obrigatório.',
+    en: '',
+    es: ''
   }
 };

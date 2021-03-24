@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getCustomRepository, getRepository } from 'typeorm';
+import { OrganizedPet } from '../../helpers/organizePetFields';
 
 import { ResponseCode } from '../../helpers/response/responseCode';
 import { deleteCloudinary } from '../../helpers/cloudinary';
 import petHelper from './pet.helper';
 import PetPhoto from '../../database/entity/PetPhoto.entity';
 import Pet from '../../database/entity/Pet.entity';
+
+import PetQuerys from '../../database/entityRepository/petQuerys';
 
 class PetRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -30,6 +33,14 @@ class PetRepository {
 
   public async registerPhoto (req: Request, res: Response): Promise<Response> {
     return res.status(200).jsonp(await this.storePhoto(req));
+  }
+
+  public async oldestLost (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getOldestLost());
+  }
+
+  public async lostLocation (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getLostLocation(req));
   }
 
   private async storePet (req: Request): Promise<void> {
@@ -97,6 +108,18 @@ class PetRepository {
       if (err.message === '004-001') throw new Error(ResponseCode.E_004_001);
       else throw new Error(ResponseCode.E_000_001);
     }
+  }
+
+  private async getOldestLost (): Promise<Array<OrganizedPet>> {
+    const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
+    return await petQuerys.OldestLost();
+  }
+
+  private async getLostLocation (req: Request): Promise<Array<OrganizedPet>> {
+    const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
+    petHelper.validFilter(req.query);
+    req.query.status = 'lost';
+    return await petQuerys.filter(req.query);
   }
 }
 
