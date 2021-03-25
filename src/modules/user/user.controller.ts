@@ -37,6 +37,46 @@ class UserController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async favoritePet (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.favoritePet(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async disfavorPet (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.disfavorPet(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async allOngsLocation (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.allOngsLocation(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async getUserHeaderData (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.getUserHeaderData(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async showPetOwner (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.showPetOwner(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new UserController();

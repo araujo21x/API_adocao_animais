@@ -9,7 +9,7 @@ class PetController {
       return await repository.register(req, res);
     } catch (err) {
       if (req.files.length > 0) {
-        const files:any = req.files;
+        const files: any = req.files;
         files.forEach((file: any) => fs.unlinkSync(file.path));
       }
       return responseError(res, err.message, 404);
@@ -45,6 +45,78 @@ class PetController {
       return await repository.registerPhoto(req, res);
     } catch (err) {
       if (req.file) fs.unlinkSync(req.file.path);
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async oldestLost (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.oldestLost(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async lostLocation (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.lostLocation(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async searchLocation (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.searchLocation(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async filterPets (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.filterPets(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async ofUserAuth (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.ofUserAuth(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async ofUser (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.ofUser(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async seeToo (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.seeToo(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async userFavoritesPets (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.userFavoritesPets(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async showPetById (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.showPetById(req, res);
+    } catch (err) {
       return responseError(res, err.message, 404);
     }
   }

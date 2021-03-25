@@ -260,5 +260,39 @@ export const ResponseMessages: any = {
     ptBR: 'Erro ao enviar email de recuperação de senha.',
     en: '',
     es: ''
+  },
+  // send email recover password
+  '011-001': {
+    ptBR: 'Não foi encontrado o seu favoritar no animal informado.',
+    en: '',
+    es: ''
+  },
+  '011-002': {
+    ptBR: 'Id do animal é obrigatório.',
+    en: '',
+    es: ''
+  },
+  // filter pet
+  '012-001': {
+    ptBR: 'Pagina é obrigatório.',
+    en: '',
+    es: ''
+  },
+  '012-002': {
+    ptBR: 'Tipo de pesquisa informado não é valida, precisa ser pet ou ong.',
+    en: '',
+    es: ''
+  },
+  // header user
+  '013-001': {
+    ptBR: 'Usuario não encontrado.',
+    en: '',
+    es: ''
+  },
+  // pet Owner
+  '014-001': {
+    ptBR: 'id do usuário é obrigatório.',
+    en: '',
+    es: ''
   }
 };

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { getRepository, getConnection } from 'typeorm';
+import { getRepository, getConnection, getCustomRepository } from 'typeorm';
 import bcryptjs from 'bcryptjs';
+import { OrganizedUserLocation, UserHeader, PetOwner } from '../../helpers/organizeUserFields';
 
 import { transport, mailOptions } from '../../helpers/transport';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -9,8 +10,13 @@ import userHelper from './user.helper';
 import isUserValid from '../../helpers/isUserValid';
 import isEmailValid from '../../helpers/isEmailValid';
 import token from '../../helpers/generateJWT';
+
 import User from '../../database/entity/User.entity';
 import Address from '../../database/entity/Address.entity';
+import Pet from '../../database/entity/Pet.entity';
+import Favorite from '../../database/entity/Favorite.entity';
+
+import UserQuerys from '../../database/entityRepository/userQuerys';
 
 class UserRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -37,6 +43,28 @@ class UserRepository {
   public async recoverPassword (req: Request, res: Response): Promise<Response> {
     await this.retrieveByEmail(req);
     return res.jsonp({});
+  }
+
+  public async favoritePet (req: Request, res: Response): Promise<Response> {
+    await this.favoritePetStore(req);
+    return res.status(200).jsonp({});
+  }
+
+  public async disfavorPet (req: Request, res: Response): Promise<Response> {
+    await this.favoritePetdelete(req);
+    return res.status(200).jsonp({});
+  }
+
+  public async allOngsLocation (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getOngsByLocation());
+  }
+
+  public async getUserHeaderData (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getUserHeader(req));
+  }
+
+  public async showPetOwner (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getPetOwner(req));
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -147,6 +175,42 @@ class UserRepository {
     } catch (err) {
       throw new Error(ResponseCode.E_010_001);
     }
+  }
+
+  private async favoritePetStore (req: Request): Promise<void> {
+    if (!req.body.idPet) throw new Error(ResponseCode.E_011_002);
+    const user = await getRepository(User).findOne(req.userId);
+    const pet = await getRepository(Pet).findOne(req.body.idPet);
+    if (!pet) throw new Error(ResponseCode.E_009_001);
+
+    try {
+      await getRepository(Favorite).save({ pet, user });
+    } catch (err) {
+      throw new Error(ResponseCode.E_000_001);
+    }
+  }
+
+  private async favoritePetdelete (req: Request): Promise<void> {
+    if (!req.body.idPet) throw new Error(ResponseCode.E_011_002);
+
+    const favoritePet: (Favorite | undefined) = await getRepository(Favorite)
+      .findOne({ where: { pet: req.body.idPet, user: req.userId } });
+
+    if (!favoritePet) throw new Error(ResponseCode.E_011_001);
+    await getRepository(Favorite).delete(favoritePet.id);
+  }
+
+  private async getOngsByLocation (): Promise<Array<OrganizedUserLocation>> {
+    return await getCustomRepository(UserQuerys).getAllOngsLocation();
+  }
+
+  private async getUserHeader (req: Request): Promise<UserHeader> {
+    return await getCustomRepository(UserQuerys).getHeader(req.userId);
+  }
+
+  private async getPetOwner (req: Request): Promise<PetOwner> {
+    if (!req.query.idUser) throw new Error(ResponseCode.E_014_001);
+    return await getCustomRepository(UserQuerys).getPetOwner(Number(req.query.idUser));
   }
 }
 

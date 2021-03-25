@@ -12,12 +12,12 @@ class Connection {
       migrationsRun: true,
       entities: [path.join(__dirname, '/entity/*.entity{.ts,.js}')],
       migrations: [path.join(__dirname, '/migrations/*{.ts,.js}')],
-      ssl: true,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false
-        }
-      }
+      ssl: false
+      // extra: {
+      //   ssl: {
+      //     rejectUnauthorized: false
+      //   }
+      // }
     });
   }
 }
