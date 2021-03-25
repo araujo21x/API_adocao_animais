@@ -7,7 +7,11 @@ import {
   organizeUserHeader,
   UserHeader,
   organizePetOwner,
-  PetOwner
+  PetOwner,
+  UserCommon,
+  organizeUserCommon,
+  UserOng,
+  organizeUserOng
 } from '../../helpers/organizeUserFields';
 import User from '../entity/User.entity';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -54,5 +58,23 @@ export default class UserQuerys extends Repository<User> {
       .getOne();
     if (!user) throw new Error(ResponseCode.E_013_001);
     return organizePetOwner(user);
+  }
+
+  public async findOng (id: number): Promise<UserOng> {
+    const user: (User | undefined) = await this.createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.address', 'address')
+      .getOne();
+    if (!user) throw new Error(ResponseCode.E_013_001);
+    return organizeUserOng(user);
+  }
+
+  public async findCommon (id: number): Promise<UserCommon> {
+    const user: (User | undefined) = await this.createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.address', 'address')
+      .getOne();
+    if (!user) throw new Error(ResponseCode.E_013_001);
+    return organizeUserCommon(user);
   }
 }

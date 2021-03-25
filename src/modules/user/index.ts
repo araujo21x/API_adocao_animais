@@ -26,4 +26,6 @@ router.route('/v1/user/searchLocation').get(controller.allOngsLocation);
 router.route('/v1/user/searchUser').get(auth, controller.getUserHeaderData);
 
 router.route('/v1/adoption/showUser').get(controller.showPetOwner);
+
+router.route('/v1/user/show').get(auth, controller.showUser);
 export default router;

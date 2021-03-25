@@ -1,4 +1,5 @@
 import User from '../database/entity/User.entity';
+import DateValidation from '../helpers/DateValidations';
 
 export interface OrganizedUser {
   idUser: number;
@@ -34,6 +35,43 @@ export interface PetOwner {
   email: string,
   city: string,
   uf: string
+}
+
+export interface UserCommon {
+  idUser: number,
+  name: string,
+  lastName: string,
+  birthday: string,
+  type: string;
+  photoProfile: string
+  email: string,
+  city: string,
+  uf: string,
+  street: string,
+  district: string,
+  addressNumber: string,
+  complement: string,
+  whatsapp?: string,
+  telephone?: string,
+}
+
+export interface UserOng {
+  idUser: number,
+  name: string,
+  type: string;
+  photoProfile: string
+  email: string,
+  city: string,
+  uf: string,
+  street: string,
+  district: string,
+  addressNumber: string,
+  complement: string,
+  latitude: number,
+  longitude: number,
+  whatsapp?: string,
+  telephone?: string,
+
 }
 export function organizeUserFileds (users: Array<User>): Array<OrganizedUser> {
   return users.map((user: User): OrganizedUser => {
@@ -74,7 +112,7 @@ export function organizeUserHeader (user: User): UserHeader {
   return userHeader;
 }
 
-export function organizePetOwner (user:User): PetOwner {
+export function organizePetOwner (user: User): PetOwner {
   const petOwner: PetOwner = {
     idUser: user.id,
     name: user.name,
@@ -85,4 +123,46 @@ export function organizePetOwner (user:User): PetOwner {
     uf: user.address[0].uf
   };
   return petOwner;
+}
+
+export function organizeUserCommon (user: User): UserCommon {
+  const userCommon: UserCommon = {
+    idUser: user.id,
+    name: user.name,
+    lastName: user.lastName,
+    type: user.type,
+    photoProfile: user.photoProfile,
+    email: user.email,
+    city: user.address[0].city,
+    uf: user.address[0].uf,
+    street: user.address[0].street,
+    district: user.address[0].district,
+    addressNumber: user.address[0].addressNumber,
+    complement: user.address[0].complement,
+    birthday: DateValidation.ConvertServerToClient(user.birthday),
+    whatsapp: user.whatsApp!,
+    telephone: user.telephone!
+  };
+  return userCommon;
+}
+
+export function organizeUserOng (user: User): UserOng {
+  const userOng: UserOng = {
+    idUser: user.id,
+    name: user.name,
+    type: user.type,
+    photoProfile: user.photoProfile,
+    email: user.email,
+    city: user.address[0].city,
+    uf: user.address[0].uf,
+    street: user.address[0].street,
+    district: user.address[0].district,
+    addressNumber: user.address[0].addressNumber,
+    complement: user.address[0].complement,
+    latitude: user.address[0].latitude,
+    longitude: user.address[0].longitude,
+    whatsapp: user.whatsApp!,
+    telephone: user.telephone!
+  };
+  return userOng;
 }
