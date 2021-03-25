@@ -1,4 +1,5 @@
 import Pet from '../database/entity/Pet.entity';
+import PetPhoto from '../database/entity/PetPhoto.entity';
 
 export interface OrganizedPet {
   idPet: number;
@@ -13,7 +14,28 @@ export interface OrganizedPet {
   idUser: number;
 }
 
-export default function (pets: Array<Pet>): Array<OrganizedPet> {
+export interface CompletePet {
+  idPet: number;
+  name: string;
+  sex: string;
+  status: string;
+  species: string;
+  phase: string;
+  castration: string;
+  race: string;
+  vaccination: string;
+  eyeColor: string;
+  feature: string
+  city: string;
+  uf: string;
+  photos: Array<{ photo: string, idPhoto: string }>;
+  userType: string;
+  idUser: number;
+  nameUser: string;
+  lastNameUser: string;
+}
+
+export function organizePetFileds (pets: Array<Pet>): Array<OrganizedPet> {
   return pets.map((pet: Pet): OrganizedPet => {
     const organizedPet: OrganizedPet = {
       idPet: pet.id,
@@ -29,4 +51,33 @@ export default function (pets: Array<Pet>): Array<OrganizedPet> {
     };
     return organizedPet;
   });
+};
+
+export function organizeCompletePet (pet: Pet): CompletePet {
+  const completePet: CompletePet = {
+    idPet: pet.id,
+    name: pet.name,
+    sex: pet.sex,
+    status: pet.status,
+    species: pet.species,
+    phase: pet.phase,
+    castration: pet.castration,
+    race: pet.race,
+    vaccination: pet.vaccination,
+    eyeColor: pet.eyeColor,
+    feature: pet.feature,
+    city: pet.user.address[0].city,
+    uf: pet.user.address[0].uf,
+    userType: pet.user.type,
+    idUser: pet.user.id,
+    nameUser: pet.user.name,
+    lastNameUser: pet.user.lastName,
+    photos: []
+  };
+
+  completePet.photos = pet.petPhotos.map((photo: PetPhoto): any => {
+    return { photo: photo.photo, idPhoto: photo.idPhoto };
+  });
+
+  return completePet;
 };

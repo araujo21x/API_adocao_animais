@@ -5,7 +5,9 @@ import {
   organizeOngLocation,
   OrganizedUserLocation,
   organizeUserHeader,
-  UserHeader
+  UserHeader,
+  organizePetOwner,
+  PetOwner
 } from '../../helpers/organizeUserFields';
 import User from '../entity/User.entity';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -43,5 +45,14 @@ export default class UserQuerys extends Repository<User> {
       .getOne();
     if (!user) throw new Error(ResponseCode.E_013_001);
     return organizeUserHeader(user);
+  }
+
+  public async getPetOwner (id: number): Promise<PetOwner> {
+    const user: (User | undefined) = await this.createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.address', 'address')
+      .getOne();
+    if (!user) throw new Error(ResponseCode.E_013_001);
+    return organizePetOwner(user);
   }
 }

@@ -285,7 +285,13 @@ export const ResponseMessages: any = {
   },
   // header user
   '013-001': {
-    ptBR: 'usuário não encontrado.',
+    ptBR: 'Usuario não encontrado.',
+    en: '',
+    es: ''
+  },
+  // pet Owner
+  '014-001': {
+    ptBR: 'id do usuário é obrigatório.',
     en: '',
     es: ''
   }

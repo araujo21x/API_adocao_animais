@@ -75,5 +75,7 @@ export enum ResponseCode {
   E_012_001 = '012-001',
   E_012_002 = '012-002',
   // Mensagens [header user].
-  E_013_001 = '013-001'
+  E_013_001 = '013-001',
+  // Mensagens [pet Owner user].
+  E_014_001 = '014-001',
 }

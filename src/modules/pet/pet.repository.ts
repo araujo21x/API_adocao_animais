@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getConnection, getCustomRepository, getRepository } from 'typeorm';
-import { OrganizedPet } from '../../helpers/organizePetFields';
+import { OrganizedPet, CompletePet } from '../../helpers/organizePetFields';
 import { OrganizedUser } from '../../helpers/organizeUserFields';
 
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -11,6 +11,7 @@ import Pet from '../../database/entity/Pet.entity';
 
 import PetQuerys from '../../database/entityRepository/petQuerys';
 import UserQuerys from '../../database/entityRepository/userQuerys';
+import FavoriteQuerys from '../../database/entityRepository/favoriteQueys';
 
 class PetRepository {
   public async register (req: Request, res: Response): Promise<Response> {
@@ -56,6 +57,29 @@ class PetRepository {
 
   public async filterPets (req: Request, res: Response): Promise<Response> {
     return res.status(200).jsonp(await this.completeFilter(req.query));
+  }
+
+  public async ofUserAuth (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getUserPetsAuth(req));
+  }
+
+  public async ofUser (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getUserPets(req.query));
+  }
+
+  public async seeToo (req: Request, res: Response): Promise<Response> {
+    let awswer: Array<OrganizedPet>;
+    if (req.query.idUser) awswer = await this.seeTooById(req.query);
+    else awswer = await this.seeTooByLocation(req.query);
+    return res.status(200).jsonp(awswer);
+  }
+
+  public async userFavoritesPets (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.showUserFavoritesPets(req.userId));
+  }
+
+  public async showPetById (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.showPet(Number(req.params.id)));
   }
 
   private async storePet (req: Request): Promise<void> {
@@ -156,6 +180,43 @@ class PetRepository {
     petHelper.filterIsValid(queryParams);
     const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
     return await petQuerys.filter(queryParams);
+  }
+
+  private async getUserPetsAuth (req: Request): Promise<Array<OrganizedPet>> {
+    if (!req.query.page || isNaN(Number(req.query.page))) throw new Error(ResponseCode.E_012_001);
+    return await getCustomRepository(PetQuerys).userPets(req.userId, Number(req.query.page));
+  }
+
+  private async getUserPets (queryParams: any): Promise<Array<OrganizedPet>> {
+    if (!queryParams.page || isNaN(Number(queryParams.page))) {
+      throw new Error(ResponseCode.E_012_001);
+    }
+    if (!queryParams.idUser || isNaN(Number(queryParams.idUser))) {
+      throw new Error(ResponseCode.E_014_001);
+    }
+    return await getCustomRepository(PetQuerys).userPets(Number(queryParams.idUser), Number(queryParams.page));
+  }
+
+  private async seeTooById (queryParams: any): Promise<Array<OrganizedPet>> {
+    if (isNaN(Number(queryParams.idUser))) throw new Error(ResponseCode.E_014_001);
+    return await getCustomRepository(PetQuerys)
+      .seeToo(Number(queryParams.idUser), undefined, undefined);
+  }
+
+  private async seeTooByLocation (queryParams: any): Promise<Array<OrganizedPet>> {
+    petHelper.isCityAndUf(queryParams);
+    return await getCustomRepository(PetQuerys)
+      .seeToo(undefined, queryParams.city, queryParams.uf);
+  }
+
+  private async showUserFavoritesPets (id:number): Promise<Array<OrganizedPet>> {
+    return await getCustomRepository(FavoriteQuerys)
+      .getUserPets(id);
+  }
+
+  private async showPet (id:number): Promise<CompletePet> {
+    return await getCustomRepository(PetQuerys)
+      .showPet(id);
   }
 }
 

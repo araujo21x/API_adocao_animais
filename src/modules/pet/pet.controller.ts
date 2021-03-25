@@ -57,7 +57,7 @@ class PetController {
     }
   }
 
-  public async lostLocation (req:Request, res:Response): Promise<Response> {
+  public async lostLocation (req: Request, res: Response): Promise<Response> {
     try {
       return await repository.lostLocation(req, res);
     } catch (err) {
@@ -65,7 +65,7 @@ class PetController {
     }
   }
 
-  public async searchLocation (req:Request, res:Response): Promise<Response> {
+  public async searchLocation (req: Request, res: Response): Promise<Response> {
     try {
       return await repository.searchLocation(req, res);
     } catch (err) {
@@ -73,9 +73,49 @@ class PetController {
     }
   }
 
-  public async filterPets (req:Request, res:Response): Promise<Response> {
+  public async filterPets (req: Request, res: Response): Promise<Response> {
     try {
       return await repository.filterPets(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async ofUserAuth (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.ofUserAuth(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async ofUser (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.ofUser(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async seeToo (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.seeToo(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async userFavoritesPets (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.userFavoritesPets(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
+
+  public async showPetById (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.showPetById(req, res);
     } catch (err) {
       return responseError(res, err.message, 404);
     }

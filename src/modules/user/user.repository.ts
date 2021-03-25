@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository, getConnection, getCustomRepository } from 'typeorm';
 import bcryptjs from 'bcryptjs';
-import { OrganizedUserLocation, UserHeader } from '../../helpers/organizeUserFields';
+import { OrganizedUserLocation, UserHeader, PetOwner } from '../../helpers/organizeUserFields';
 
 import { transport, mailOptions } from '../../helpers/transport';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -61,6 +61,10 @@ class UserRepository {
 
   public async getUserHeaderData (req: Request, res: Response): Promise<Response> {
     return res.status(200).jsonp(await this.getUserHeader(req));
+  }
+
+  public async showPetOwner (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.getPetOwner(req));
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -202,6 +206,11 @@ class UserRepository {
 
   private async getUserHeader (req: Request): Promise<UserHeader> {
     return await getCustomRepository(UserQuerys).getHeader(req.userId);
+  }
+
+  private async getPetOwner (req: Request): Promise<PetOwner> {
+    if (!req.query.idUser) throw new Error(ResponseCode.E_014_001);
+    return await getCustomRepository(UserQuerys).getPetOwner(Number(req.query.idUser));
   }
 }
 

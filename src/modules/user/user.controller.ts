@@ -69,6 +69,14 @@ class UserController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async showPetOwner (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.showPetOwner(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new UserController();

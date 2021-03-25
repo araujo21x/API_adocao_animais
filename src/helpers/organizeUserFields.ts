@@ -25,6 +25,16 @@ export interface UserHeader {
   lastName: string,
   passwordChance: boolean
 }
+
+export interface PetOwner {
+  idUser: number,
+  name: string,
+  lastName: string,
+  whatsapp: string,
+  email: string,
+  city: string,
+  uf: string
+}
 export function organizeUserFileds (users: Array<User>): Array<OrganizedUser> {
   return users.map((user: User): OrganizedUser => {
     const organizedUser: OrganizedUser = {
@@ -62,4 +72,17 @@ export function organizeUserHeader (user: User): UserHeader {
     passwordChance: user.passwordChange
   };
   return userHeader;
+}
+
+export function organizePetOwner (user:User): PetOwner {
+  const petOwner: PetOwner = {
+    idUser: user.id,
+    name: user.name,
+    lastName: user.lastName,
+    whatsapp: user.whatsApp,
+    email: user.email,
+    city: user.address[0].city,
+    uf: user.address[0].uf
+  };
+  return petOwner;
 }

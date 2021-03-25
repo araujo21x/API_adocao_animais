@@ -189,6 +189,12 @@ class PetHelper {
     if (!page || isNaN(page)) throw new Error(ResponseCode.E_012_001);
   }
 
+  public isCityAndUf (queryParams: any): void {
+    const { uf, city } = queryParams;
+    isUFValid(uf);
+    if (!city) throw new Error(ResponseCode.E_001_014);
+  }
+
   public filterIsValid (queryParams: any): void {
     this.isLostLocation(queryParams);
     const { species, status, sex, phase } = queryParams;
