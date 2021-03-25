@@ -35,7 +35,7 @@ class UserHelper {
   }
 
   public recoverFactory (): any {
-    const newPassword:string = Math.random().toString(36).slice(-15);
+    const newPassword: string = Math.random().toString(36).slice(-15);
     const userChanges: any = {};
     userChanges.passwordChange = true;
     userChanges.passwordChangeDate = new Date().toISOString();
@@ -235,10 +235,10 @@ class UserHelper {
     const { name, whatsApp, telephone, email, password } = req.body;
     if (!name) throw new Error(ResponseCode.E_001_001);
     if (telephone) {
-      if (telephone.length !== 11) throw new Error(ResponseCode.E_001_023);
+      if (!/\(\d{2}\)\s9\s\d{4}-\d{4}/g.test(telephone)) throw new Error(ResponseCode.E_001_023);
     }
     if (whatsApp) {
-      if (whatsApp.length !== 11) throw new Error(ResponseCode.E_001_024);
+      if (!/\(\d{2}\)\s9\s\d{4}-\d{4}/g.test(whatsApp)) throw new Error(ResponseCode.E_001_024);
     }
     if (!req.file) throw new Error(ResponseCode.E_001_011);
     isEmailValid(email);
@@ -276,10 +276,10 @@ class UserHelper {
   private userFieldsIsValidEdit (userFields: any): void {
     const { whatsApp, telephone, email, password } = userFields;
     if (telephone) {
-      if (telephone.length !== 11) throw new Error(ResponseCode.E_001_023);
+      if (!/\(\d{2}\)\s9\s\d{4}-\d{4}/g.test(telephone)) throw new Error(ResponseCode.E_001_023);
     }
     if (whatsApp) {
-      if (whatsApp.length !== 11) throw new Error(ResponseCode.E_001_024);
+      if (!/\(\d{2}\)\s9\s\d{4}-\d{4}/g.test(whatsApp)) throw new Error(ResponseCode.E_001_024);
     }
     if (email) isEmailValid(email);
     if (password) isPasswordValid(password);

@@ -12,8 +12,8 @@ const filePath = path.resolve(__dirname, '..', 'files', 'imgProfile1.png');
 
 const editUser = () => ({
   name: 'successfullyEditOng',
-  whatsApp: '31912345678',
-  telephone: '31912345678',
+  whatsApp: '(31) 9 1234-5678',
+  telephone: '(31) 9 1234-5678',
   email: 'OngEditUser@example.com',
   password: '40302010',
   uf: 'MG',

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository, getConnection, getCustomRepository } from 'typeorm';
 import bcryptjs from 'bcryptjs';
-import { OrganizedUserLocation, UserHeader, PetOwner } from '../../helpers/organizeUserFields';
+import { OrganizedUserLocation, UserHeader, PetOwner, UserCommon, UserOng } from '../../helpers/organizeUserFields';
 
 import { transport, mailOptions } from '../../helpers/transport';
 import { ResponseCode } from '../../helpers/response/responseCode';
@@ -65,6 +65,13 @@ class UserRepository {
 
   public async showPetOwner (req: Request, res: Response): Promise<Response> {
     return res.status(200).jsonp(await this.getPetOwner(req));
+  }
+
+  public async showUser (req: Request, res: Response): Promise<Response> {
+    let awswer: (UserOng | UserCommon);
+    if (req.userType === 'ong') awswer = await this.showOng(req.userId);
+    else awswer = await this.showCommon(req.userId);
+    return res.status(200).jsonp(awswer);
   }
 
   private async storeOng (req: Request): Promise<string> {
@@ -211,6 +218,14 @@ class UserRepository {
   private async getPetOwner (req: Request): Promise<PetOwner> {
     if (!req.query.idUser) throw new Error(ResponseCode.E_014_001);
     return await getCustomRepository(UserQuerys).getPetOwner(Number(req.query.idUser));
+  }
+
+  private async showCommon (id: number): Promise<UserCommon> {
+    return await getCustomRepository(UserQuerys).findCommon(id);
+  }
+
+  private async showOng (id: number): Promise<UserOng> {
+    return await getCustomRepository(UserQuerys).findOng(id);
   }
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import { ResponseCode } from './response/responseCode';
 class DateValidation {
-  public dateForUser (date: string, birthday:Boolean): void {
+  public dateForUser (date: string, birthday: Boolean): void {
     if (!date) throw new Error(ResponseCode.E_001_009);
     const newDate = this.ValidateClientDate(date);
     if (birthday) this.isOldEnough(newDate);
@@ -16,8 +16,19 @@ class DateValidation {
     return new Date(year, month, day);
   }
 
-  public ConvertServerToClient () {
+  public ConvertServerToClient (birthday: Date): string {
+    const date: Date = new Date(birthday);
 
+    let day: string = date.getDate().toString();
+    day = day.length > 1 ? day : `0${day}`;
+
+    let mother: string = date.getMonth().toString();
+    mother = `${Number(mother) + 1}`;
+    mother = mother.length > 1 ? mother : `0${mother}`;
+
+    const year:string = date.getFullYear().toString();
+
+    return `${day}/${mother}/${year}`;
   }
 
   private ValidateClientDate (dateString: string): string {

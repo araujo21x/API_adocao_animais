@@ -77,6 +77,14 @@ class UserController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async showUser (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.showUser(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new UserController();

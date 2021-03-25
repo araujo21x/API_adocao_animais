@@ -120,27 +120,27 @@ async function Dump () {
   try {
     await startConnection();
     await getConnection().transaction(async transaction => {
-      const userLogin = await transaction.save(userFactory('loginRegister', '74987456321', '74987456321', 'common', 'login@example.com', 'fasdfasdf', 'fadsdfasd', 'test login'));
+      const userLogin = await transaction.save(userFactory('loginRegister', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', 'login@example.com', 'fasdfasdf', 'fadsdfasd', 'test login'));
       await transaction.save(addressFactory(userLogin, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
-      const userOngPet = await transaction.save(userFactory('ongRegister', '74987456321', '74987456321', 'ong', emailONG(1), 'fasdfasdf', 'fadsdfasd'));
+      const userOngPet = await transaction.save(userFactory('ongRegister', '(74) 9 8745-6321', '(74) 9 8745-6321', 'ong', emailONG(1), 'fasdfasdf', 'fadsdfasd'));
       await transaction.save(addressFactory(userOngPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
 
       const photoUserCommon = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite User Common 1');
-      const userEditCommon = await transaction.save(userFactory('editCommon', '74987456321', '74987456321', 'common', emailCommon(2), photoUserCommon.url, photoUserCommon.idPhoto, 'test edit common'));
+      const userEditCommon = await transaction.save(userFactory('editCommon', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', emailCommon(2), photoUserCommon.url, photoUserCommon.idPhoto, 'test edit common'));
       await transaction.save(addressFactory(userEditCommon, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
       const photoUserONG = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite User ONG 1');
-      const userEditONG = await transaction.save(userFactory('editONG', '74987456321', '74987456321', 'ong', emailONG(3), photoUserONG.url, photoUserONG.idPhoto));
+      const userEditONG = await transaction.save(userFactory('editONG', '(74) 9 8745-6321', '(74) 9 8745-6321', 'ong', emailONG(3), photoUserONG.url, photoUserONG.idPhoto));
       await transaction.save(addressFactory(userEditONG, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente', -10.4287, -40.1012));
 
       const photoUserEditPet = await upload(path.resolve(__dirname, 'files', 'imgProfile1.png'), 'User', 'Edite pet 1');
-      const userEditPet = await transaction.save(userFactory('editPet', '74987456321', '74987456321', 'common', emailCommon(3), photoUserEditPet.url, photoUserEditPet.idPhoto, 'test edit pet'));
+      const userEditPet = await transaction.save(userFactory('editPet', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', emailCommon(3), photoUserEditPet.url, photoUserEditPet.idPhoto, 'test edit pet'));
       await transaction.save(addressFactory(userEditPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userEditPet, 'loganEdit1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
       await transaction.save(petFactory(userLogin, 'erroEditId', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Problema na pata traseira e nas unhas.'));
 
-      const userPhotoPet = await transaction.save(userFactory('PhotoPet', '74987456321', '74987456321', 'common', emailCommon(4), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'add e delete photo pet'));
+      const userPhotoPet = await transaction.save(userFactory('PhotoPet', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', emailCommon(4), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'add e delete photo pet'));
       await transaction.save(addressFactory(userPhotoPet, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userPhotoPet, 'pet add photo 1', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
 
@@ -154,14 +154,14 @@ async function Dump () {
       const deletePet1 = await upload(path.resolve(__dirname, 'files', 'imgPet1.jpg'), 'Pet', 'Pet delete 1');
       await transaction.save(petPhotoFactory(deletePet, deletePet1.url, deletePet1.idPhoto));
 
-      const userRecoveryPassword = await transaction.save(userFactory('recoveryPassword', '74987456321', '74987456321', 'ong', emailONG(4), 'sssss', 'ddddd'));
+      const userRecoveryPassword = await transaction.save(userFactory('recoveryPassword', '(74) 9 8745-6321', '(74) 9 8745-6321', 'ong', emailONG(4), 'sssss', 'ddddd'));
       await transaction.save(addressFactory(userRecoveryPassword, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
 
-      const userFavoriteCreate = await transaction.save(userFactory('userFavoriteCreate', '74987456321', '74987456321', 'common', emailCommon(5), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'favorite pet'));
+      const userFavoriteCreate = await transaction.save(userFactory('userFavoriteCreate', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', emailCommon(5), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'favorite pet'));
       await transaction.save(addressFactory(userFavoriteCreate, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       await transaction.save(petFactory(userFavoriteCreate, 'favorite pet', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
 
-      const userFavoriteDelete = await transaction.save(userFactory('userFavoriteDelete', '74987456321', '74987456321', 'common', emailCommon(6), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'user Favorite Delete'));
+      const userFavoriteDelete = await transaction.save(userFactory('userFavoriteDelete', '(74) 9 8745-6321', '(74) 9 8745-6321', 'common', emailCommon(6), 'asdfasdfasdfasdf', 'asdfasdfasdfasdf', 'user Favorite Delete'));
       await transaction.save(addressFactory(userFavoriteDelete, 'BA', 'city test', '48970-000', 'street test', 'district test', '1200 a', 'casa, que tem casas do lado e na frente'));
       const petdisfavor = await transaction.save(petFactory(userFavoriteDelete, 'pet Favorite Delete', 'male', 'adoption', 'cat', 'puppy', 'Castrado', 'Vira-Lata', 'Vacinado', 'Azul', 'Marrom com branco', 'Nenhum.'));
       await transaction.save(favoriteFactory(petdisfavor, userFavoriteDelete));

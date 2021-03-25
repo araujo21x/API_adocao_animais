@@ -13,8 +13,8 @@ const filePath = path.resolve(__dirname, '..', 'files', 'imgProfile1.png');
 const user = (): any => ({
   name: 'UserOng',
   type: 'ong',
-  whatsApp: '74987654321',
-  telephone: '74987654321',
+  whatsApp: '(31) 9 1234-5678',
+  telephone: '(31) 9 1234-5678',
   email: emailONG(2),
   password,
   uf: 'BA',
