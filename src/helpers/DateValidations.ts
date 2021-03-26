@@ -48,7 +48,13 @@ class DateValidation {
       throw new Error(ResponseCode.E_001_026);
     }
 
-    return `${year}-0${month}-${day}`;
+    let daySend: string = date.getDate().toString();
+    daySend = daySend.length > 1 ? daySend : `0${daySend}`;
+
+    let mothSend: string = date.getMonth().toString();
+    mothSend = mothSend.length > 1 ? mothSend : `0${mothSend}`;
+
+    return `${year}-${mothSend}-${daySend}`;
   }
 
   private isOldEnough (date: string): void {
