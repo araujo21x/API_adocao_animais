@@ -20,6 +20,7 @@ class UserHelper {
     this.userFieldsIsValid(req);
     this.addressFieldsIsValid(req.body);
     this.ongAddressIsValid(req.body);
+    if (!req.file) throw new Error(ResponseCode.E_001_011);
   }
 
   public isCommonValid (req: Request): void {
@@ -127,10 +128,12 @@ class UserHelper {
 
   public async commonFactory (req: Request): Promise<User> {
     const { name, type, whatsApp, telephone, email, password, lastName, birthday } = req.body;
-    const photo: any = await uploadCloud(req, 'User');
     const user: User = new User();
-    user.photoProfile = photo[0].url;
-    user.idPhotoProfile = photo[0].idPhoto;
+    if (req.file) {
+      const photo: any = await uploadCloud(req, 'User');
+      user.photoProfile = photo[0].url;
+      user.idPhotoProfile = photo[0].idPhoto;
+    }
     user.name = name;
     user.lastName = lastName;
     user.birthday = dateValidation.ConvertClientToServer(birthday);
@@ -240,7 +243,6 @@ class UserHelper {
     if (whatsApp) {
       if (!/\(\d{2}\)\s9\s\d{4}-\d{4}/g.test(whatsApp)) throw new Error(ResponseCode.E_001_024);
     }
-    if (!req.file) throw new Error(ResponseCode.E_001_011);
     isEmailValid(email);
     isPasswordValid(password);
   }
