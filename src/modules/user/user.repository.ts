@@ -156,7 +156,7 @@ class UserRepository {
     }
   }
 
-  private async autheticate (body: any): Promise<string> {
+  private async autheticate (body: any): Promise<any> {
     const { email, password } = body;
     userHelper.isLoginFieldsValid(body);
 
@@ -166,7 +166,10 @@ class UserRepository {
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) throw new Error(ResponseCode.E_003_002);
 
-    return token(user.id, user.type);
+    return {
+      token: token(user.id, user.type),
+      user: await getCustomRepository(UserQuerys).getHeader(user.id)
+    };
   }
 
   private async retrieveByEmail (req: Request): Promise<any> {
