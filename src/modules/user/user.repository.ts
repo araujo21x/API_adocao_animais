@@ -74,7 +74,7 @@ class UserRepository {
     return res.status(200).jsonp(awswer);
   }
 
-  private async storeOng (req: Request): Promise<string> {
+  private async storeOng (req: Request): Promise<any> {
     userHelper.isOngValid(req);
     await userHelper.existingEmail(req.body.email);
     let user: any = {};
@@ -88,10 +88,13 @@ class UserRepository {
       throw new Error(ResponseCode.E_000_001);
     }
 
-    return token(user.id, user.type);
+    return {
+      token: token(user.id, user.type),
+      user: await getCustomRepository(UserQuerys).getHeader(user.id)
+    }; ;
   }
 
-  private async storeCommon (req: Request): Promise<string> {
+  private async storeCommon (req: Request): Promise<any> {
     userHelper.isCommonValid(req);
     await userHelper.existingEmail(req.body.email);
     let user: any = {};
@@ -105,7 +108,10 @@ class UserRepository {
       throw new Error(ResponseCode.E_000_001);
     }
 
-    return token(user.id, user.type);
+    return {
+      token: token(user.id, user.type),
+      user: await getCustomRepository(UserQuerys).getHeader(user.id)
+    };
   }
 
   private async editOng (req: Request): Promise<void> {
