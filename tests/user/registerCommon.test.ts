@@ -168,17 +168,6 @@ describe('Suit de tests register user type common', () => {
       testErrors(result, 'É obrigatório ter mais de 16 anos.');
       done();
     });
-  test(`[ ERR: 001-011 ] - [ ${endPoint} ]`,
-    async (done: jest.DoneCallback) => {
-      const send: any = user();
-
-      const { status, body: { result } } = await request.post(`${endPoint}`)
-        .field(send);
-
-      expect(status).toBe(404);
-      testErrors(result, 'Foto é obrigatória.');
-      done();
-    });
   test(`[ ERR: 001-012 ] - [ ${endPoint} ]`,
     async (done: jest.DoneCallback) => {
       const send: any = user();

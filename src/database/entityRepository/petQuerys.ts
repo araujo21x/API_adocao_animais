@@ -34,7 +34,7 @@ export default class PetQuerys extends Repository<Pet> {
     if (status) pets.andWhere('pet.status = :status', { status });
     if (sex) pets.andWhere('pet.sex = :sex', { sex });
     if (phase) pets.andWhere('pet.phase = :phase', { phase });
-    if (species) pets.andWhere('pet.species = :species', { species });
+    if (species && species !== 'all') pets.andWhere('pet.species = :species', { species });
 
     return organizePetFileds(await pets.getMany());
   }

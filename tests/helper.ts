@@ -17,5 +17,5 @@ export const testErrors = (result: any, msg: string) => {
 
 export const getTokenIdUser = async (email: string): Promise<string> => {
   const { body } = await request.post('/v1/login').send({ email, password });
-  return body;
+  return body.token;
 };
