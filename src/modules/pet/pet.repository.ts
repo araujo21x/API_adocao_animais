@@ -163,7 +163,7 @@ class PetRepository {
 
   private async searchLocationPet (queryParams: any): Promise<Array<OrganizedPet>> {
     petHelper.isLostLocation(queryParams);
-    if (queryParams.species !== 'cat' && queryParams.species !== 'dog') {
+    if (queryParams.species !== 'cat' && queryParams.species !== 'dog' && queryParams.species !== 'all') {
       throw new Error(ResponseCode.E_002_003);
     }
     const petQuerys: PetQuerys = getCustomRepository(PetQuerys);

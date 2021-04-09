@@ -14,8 +14,6 @@ export default class FavoriteQuerys extends Repository<Favorite> {
       .where('user.id = :id', { id })
       .getMany();
 
-    console.log(user);
-
     return organizeFavorite(user);
   }
 }

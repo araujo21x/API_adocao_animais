@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default (id: number, type: string): string => {
+export default function (id: number, type: string): string {
   return jwt.sign(
     { id, type },
     `${process.env.SECRET}`,
