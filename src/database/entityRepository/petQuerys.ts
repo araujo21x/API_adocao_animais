@@ -12,7 +12,7 @@ export default class PetQuerys extends Repository<Pet> {
       .leftJoinAndSelect('user.address', 'address')
       .where('pet.status = :status', { status: 'lost' })
       .orderBy('pet.createdAt', 'ASC')
-      .take(8)
+      .take(5)
       .getMany();
 
     return organizePetFileds(pets);

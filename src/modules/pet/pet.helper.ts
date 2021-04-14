@@ -204,7 +204,7 @@ class PetHelper {
     if (status) {
       if (!this.validRegisterStatus.includes(status)) throw new Error(ResponseCode.E_002_002);
     }
-    if (species) {
+    if (species && species !== 'all') {
       if (!this.validSpecies.includes(species)) throw new Error(ResponseCode.E_002_003);
     }
     if (phase) {
