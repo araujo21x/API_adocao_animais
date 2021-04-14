@@ -33,6 +33,7 @@ export interface CompletePet {
   idUser: number;
   nameUser: string;
   lastNameUser: string;
+  hairColor: string;
 }
 
 export function organizePetFileds (pets: Array<Pet>): Array<OrganizedPet> {
@@ -54,18 +55,23 @@ export function organizePetFileds (pets: Array<Pet>): Array<OrganizedPet> {
 };
 
 export function organizeCompletePet (pet: Pet): CompletePet {
+  let newPhase = pet.phase;
+  if (pet.phase === 'puppy') newPhase = 'Filhote';
+  if (pet.phase === 'elderly') newPhase = 'Idoso';
+  if (pet.phase === 'adult') newPhase = 'Adulto';
   const completePet: CompletePet = {
     idPet: pet.id,
     name: pet.name,
     sex: pet.sex,
     status: pet.status,
     species: pet.species,
-    phase: pet.phase,
+    phase: newPhase,
     castration: pet.castration,
     race: pet.race,
     vaccination: pet.vaccination,
     eyeColor: pet.eyeColor,
     feature: pet.feature,
+    hairColor: pet.hairColor,
     city: pet.user.address[0].city,
     uf: pet.user.address[0].uf,
     userType: pet.user.type,
