@@ -34,7 +34,13 @@ export interface PetOwner {
   whatsapp: string,
   email: string,
   city: string,
-  uf: string
+  uf: string,
+  postalCode?: string,
+  street?: string,
+  district?: string,
+  addressNumber?: string,
+  complement?: string
+
 }
 
 export interface UserCommon {
@@ -122,6 +128,19 @@ export function organizePetOwner (user: User): PetOwner {
     city: user.address[0].city,
     uf: user.address[0].uf
   };
+  if (user.type === 'ong') {
+    petOwner.postalCode = user.address[0].postalCode!;
+    petOwner.street = user.address[0].street!;
+    petOwner.district = user.address[0].district!;
+    petOwner.addressNumber = user.address[0].addressNumber!;
+    petOwner.complement = user.address[0].complement!;
+  } else {
+    petOwner.postalCode = undefined;
+    petOwner.street = undefined;
+    petOwner.district = undefined;
+    petOwner.addressNumber = undefined;
+    petOwner.complement = undefined;
+  }
   return petOwner;
 }
 
