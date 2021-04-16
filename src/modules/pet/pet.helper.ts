@@ -211,5 +211,21 @@ class PetHelper {
       if (!this.validPhase.includes(phase)) throw new Error(ResponseCode.E_002_004);
     }
   }
+
+  public filterByUserIsValid (queryParams: any): void {
+    const { species, status, sex, phase } = queryParams;
+    if (sex) {
+      if (!this.validGenders.includes(sex)) throw new Error(ResponseCode.E_002_001);
+    }
+    if (status) {
+      if (!this.validRegisterStatus.includes(status)) throw new Error(ResponseCode.E_002_002);
+    }
+    if (species && species !== 'all') {
+      if (!this.validSpecies.includes(species)) throw new Error(ResponseCode.E_002_003);
+    }
+    if (phase) {
+      if (!this.validPhase.includes(phase)) throw new Error(ResponseCode.E_002_004);
+    }
+  }
 }
 export default new PetHelper();
