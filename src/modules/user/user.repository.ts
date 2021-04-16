@@ -121,7 +121,7 @@ class UserRepository {
 
     try {
       await getConnection().transaction(async transaction => {
-        if (userHelper.isNeedUserOng(req.body)) {
+        if (userHelper.isNeedUserOng(req.body) || req.file) {
           await transaction.getRepository(User)
             .update(req.userId, await userHelper.ongFactoryEdit(req));
         }
