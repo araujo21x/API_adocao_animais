@@ -82,6 +82,10 @@ class PetRepository {
     return res.status(200).jsonp(await this.showPet(Number(req.params.id)));
   }
 
+  public async filterByUser (req: Request, res: Response): Promise<Response> {
+    return res.status(200).jsonp(await this.completeFilterByUser(req.query));
+  }
+
   private async storePet (req: Request): Promise<void> {
     petHelper.isPetFieldsValid(req);
     const user = await petHelper.userIsValid(req.userId);
@@ -217,6 +221,13 @@ class PetRepository {
   private async showPet (id:number): Promise<CompletePet> {
     return await getCustomRepository(PetQuerys)
       .showPet(id);
+  }
+
+  private async completeFilterByUser (queryParams: any): Promise<Array<OrganizedPet>> {
+    petHelper.filterIsValid(queryParams);
+    if (!queryParams.idUser) throw new Error(ResponseCode.E_014_001);
+    const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
+    return await petQuerys.filterByUser(queryParams);
   }
 }
 

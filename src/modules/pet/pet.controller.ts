@@ -120,6 +120,14 @@ class PetController {
       return responseError(res, err.message, 404);
     }
   }
+
+  public async filterByUser (req: Request, res: Response): Promise<Response> {
+    try {
+      return await repository.filterByUser(req, res);
+    } catch (err) {
+      return responseError(res, err.message, 404);
+    }
+  }
 }
 
 export default new PetController();

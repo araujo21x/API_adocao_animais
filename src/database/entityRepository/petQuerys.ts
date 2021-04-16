@@ -80,4 +80,26 @@ export default class PetQuerys extends Repository<Pet> {
     if (!pet) throw new Error(ResponseCode.E_009_001);
     return organizeCompletePet(pet);
   }
+
+  public async filterByUser (queryParams: any): Promise<Array<OrganizedPet>> {
+    const { page, city, uf, status, species, sex, phase, idUser } = queryParams;
+
+    const pets: any = this.createQueryBuilder('pet')
+      .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
+      .leftJoinAndSelect('pet.user', 'user')
+      .leftJoinAndSelect('user.address', 'address')
+      .where('address.city = :city', { city })
+      .andWhere('address.uf = :uf', { uf })
+      .andWhere('user.id = :idUser', { idUser })
+      .orderBy('pet.createdAt', 'DESC')
+      .skip(12 * (Number(page) - 1))
+      .take(12);
+
+    if (status) pets.andWhere('pet.status = :status', { status });
+    if (sex) pets.andWhere('pet.sex = :sex', { sex });
+    if (phase) pets.andWhere('pet.phase = :phase', { phase });
+    if (species && species !== 'all') pets.andWhere('pet.species = :species', { species });
+
+    return organizePetFileds(await pets.getMany());
+  }
 }
