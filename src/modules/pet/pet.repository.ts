@@ -224,7 +224,7 @@ class PetRepository {
   }
 
   private async completeFilterByUser (queryParams: any): Promise<Array<OrganizedPet>> {
-    petHelper.filterIsValid(queryParams);
+    petHelper.filterByUserIsValid(queryParams);
     if (!queryParams.idUser) throw new Error(ResponseCode.E_014_001);
     const petQuerys: PetQuerys = getCustomRepository(PetQuerys);
     return await petQuerys.filterByUser(queryParams);

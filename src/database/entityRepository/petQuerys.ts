@@ -82,15 +82,13 @@ export default class PetQuerys extends Repository<Pet> {
   }
 
   public async filterByUser (queryParams: any): Promise<Array<OrganizedPet>> {
-    const { page, city, uf, status, species, sex, phase, idUser } = queryParams;
+    const { page, status, species, sex, phase, idUser } = queryParams;
 
     const pets: any = this.createQueryBuilder('pet')
       .leftJoinAndSelect('pet.petPhotos', 'petPhotos')
       .leftJoinAndSelect('pet.user', 'user')
       .leftJoinAndSelect('user.address', 'address')
-      .where('address.city = :city', { city })
-      .andWhere('address.uf = :uf', { uf })
-      .andWhere('user.id = :idUser', { idUser })
+      .where('user.id = :idUser', { idUser })
       .orderBy('pet.createdAt', 'DESC')
       .skip(12 * (Number(page) - 1))
       .take(12);
