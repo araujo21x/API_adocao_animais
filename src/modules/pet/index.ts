@@ -21,6 +21,7 @@ router.route('/v1/pets/lost/oldest').get(controller.oldestLost);
 router.route('/v1/pets/lost/searchLocation').get(controller.lostLocation);
 router.route('/v1/searchLocation').get(controller.searchLocation);
 router.route('/v1/pet/filter').get(controller.filterPets);
+router.route('/v1/pet/filterByUser').get(controller.filterByUser);
 router.route('/v1/pets/ofUserAuth').get(auth, controller.ofUserAuth);
 router.route('/v1/pets/searchOng').get(controller.ofUser);
 router.route('/v1/pets/seeToo').get(controller.seeToo);
