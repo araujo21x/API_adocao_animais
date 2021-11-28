@@ -183,9 +183,11 @@ as resposta da API;
 ___
 # Autores 
 
-<br> 
-
-## Lucas de Araujo Cirqueira:
+### Lucas de Araujo Cirqueira(desenvolveu o back-end):
 * [GitHub](https://github.com/araujo21x);
 * [LinkedIn](https://www.linkedin.com/in/lucas-araujo-cirqueira-a1402519b/)
+
+### Anderson Pablo(desenvolveu o front-end):
+* [GitHub](https://github.com/andersonzeroone);
+* [LinkedIn](https://www.linkedin.com/in/anderson-pablo-js/)
 
